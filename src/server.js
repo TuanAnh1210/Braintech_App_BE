@@ -1,12 +1,13 @@
 import express from "express";
 import mongoose from "mongoose";
-import movieRouter from "./routers/courses";
+
 import bodyParser from "body-parser";
-import castRouter from "./routers/categories";
-import genresRouter from "./routers/genres";
+
 import uploadRouter from "./routers/upload";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import coursesRouter from "./routers/courses";
+import cateRouter from "./routers/categories";
 
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
@@ -24,9 +25,8 @@ app.use(bodyParser.json());
 app.use(express.static("src/public"));
 
 // Router
-app.use("/api", movieRouter);
-// app.use("/api", castRouter);
-// app.use("/api", genresRouter);
+app.use("/api/courses", coursesRouter);
+app.use("/api/cate", cateRouter);
 app.use("/upload", uploadRouter);
 
 mongoose

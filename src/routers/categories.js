@@ -1,20 +1,8 @@
 import express from "express";
-import {
-  create,
-  get,
-  getById,
-  remove,
-  search,
-  update,
-} from "../controllers/categories";
+import { get } from "../controllers/categories";
 
-const castRouter = express.Router();
+const cateRouter = express.Router();
 
-castRouter.get("/cate", get);
-castRouter.get("/casts/:id", getById);
-castRouter.get("/search", search);
-castRouter.post("/casts", create);
-castRouter.patch("/casts/:id", update);
-castRouter.delete("/casts/:id", remove);
+cateRouter.get("/", get);
 
-export default castRouter;
+export default cateRouter;

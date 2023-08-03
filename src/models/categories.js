@@ -1,15 +1,14 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const Categories = new Schema({
-  name: {
-    type: String,
-    required: true,
+const Categories = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  { timestamps: true, versionKey: false }
+);
 
-export default mongoose.model("Categories", Categories);
+export default mongoose.model("categories", Categories);
