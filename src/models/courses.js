@@ -25,7 +25,18 @@ const Courses = new Schema(
       type: String,
       required: true,
     },
-    cate_id: { type: Schema.Types.ObjectId, ref: "categories", required: true },
+    cate_id: {
+      type: Schema.Types.ObjectId,
+      ref: "categories",
+      required: true,
+    },
+    chapters: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "chapters",
+        require: true,
+      },
+    ],
   },
   { timestamps: true, versionKey: false }
 );
