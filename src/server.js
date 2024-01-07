@@ -10,6 +10,8 @@ import coursesRouter from "./routers/courses";
 import cateRouter from "./routers/categories";
 import chaptersRouter from "./routers/chapters";
 import lessonsRouter from "./routers/lessons";
+import usersRouter from "./routers/users";
+import statusCourseRouter from "./routers/statusCourse";
 
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
@@ -24,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://127.0.0.1:5173"); // Thay thế bằng nguồn gốc của trang web hiện tại
+  res.header("Access-Control-Allow-Origin", "*"); // Thay thế bằng nguồn gốc của trang web hiện tại
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
@@ -38,6 +40,8 @@ app.use(express.static("src/public"));
 // Router
 app.use("/api/courses", coursesRouter);
 app.use("/api/lessons", lessonsRouter);
+app.use("/api/sttCourse", statusCourseRouter);
+app.use("/api/users", usersRouter);
 app.use("/api/cate", cateRouter);
 app.use("/api/chapters", chaptersRouter);
 app.use("/upload", uploadRouter);
