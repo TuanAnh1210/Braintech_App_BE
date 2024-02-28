@@ -41,13 +41,13 @@ app.use(express.static("src/public"));
 app.use("/api/courses", coursesRouter);
 app.use("/api/lessons", lessonsRouter);
 app.use("/api/sttCourse", statusCourseRouter);
-app.use("/api/users", usersRouter);
+app.use("/api/user", usersRouter);
 app.use("/api/cate", cateRouter);
 app.use("/api/chapters", chaptersRouter);
 app.use("/upload", uploadRouter);
 
 mongoose
-  .connect("mongodb://localhost:27017/braintech")
+  .connect("mongodb://127.0.0.1:27017/braintech")
   .then(() => console.log("Connected to DB"));
 
 app.listen(port, () => {

@@ -1,8 +1,10 @@
 import { Schema, Types, model } from "mongoose";
 
-const Users = new Schema(
+import { hashPassword } from "../helper/utils";
+
+const User = new Schema(
   {
-    name: {
+    full_name: {
       type: String,
       require: true,
     },
@@ -10,12 +12,12 @@ const Users = new Schema(
       type: String,
       require: true,
     },
-    password: {
-      type: String,
-    },
     phone: {
       type: String,
       default: null,
+    },
+    password: {
+      type: String,
     },
     avatar: {
       type: String,
@@ -26,4 +28,12 @@ const Users = new Schema(
   { timestamps: true, versionKey: false }
 );
 
-export default model("users", Users);
+User.pre("save", async function (next) {
+  const user = this;
+  if (user.isModified("password")) {
+    user.password = await hashPassword(user.password);
+  }
+  next();
+});
+
+export default model("users", User);
