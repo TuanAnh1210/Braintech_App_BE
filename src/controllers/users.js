@@ -1,33 +1,118 @@
-import Users from "../models/users";
+import User from "../models/users";
+
+import { loginSchema, registerSchema } from "../validations/user.validate";
+import CreateJwt, { comparePassword } from "../helper/utils";
 
 export const getAll = async (req, res) => {
   try {
-    const users = await Users.find();
+    const users = await User.find();
 
-    res.send({
+    res.json({
       message: "Get all users successfully",
       data: users,
     });
   } catch (error) {
-    res.status(500).send({
+    res.status(500).json({
       message: error,
     });
   }
 };
 
-export const create = async (req, res) => {
+export const login = async (req, res) => {
   try {
-    const body = req.body;
-    if (!body.password) {
-      const user = Users.create(body);
+    const { account, auth_type, password } = req.body;
 
-      return res.send({
-        message: "Login successfully",
-        data: user,
+    const error = loginSchema(req.body);
+
+    if (error) {
+      return res.status(400).json({
+        error: 1,
+        message: error.message,
       });
     }
+
+    const user = await User.findOne({ [auth_type]: account });
+
+    if (!user) {
+      return res.status(400).json({
+        error: 1,
+        message: "Tài khoản hoặc mật khẩu không chính xác",
+      });
+    }
+
+    const pwStatus = await comparePassword(password, user.password);
+
+    if (!pwStatus) {
+      return res.status(400).json({
+        error: 1,
+        message: "Tài khoản hoặc mật khẩu không chính xác",
+      });
+    }
+
+    const token = CreateJwt({ _id: user._id.toString() });
+
+    return res.status(200).json({
+      message: "Đăng nhập thành công",
+      user: {
+        fullName: user.full_name,
+        email: user.email || null,
+        avatar: user.avatar,
+        accessToken: token,
+      },
+    });
   } catch (error) {
-    res.status(500).send({
+    console.log("error: login", error);
+    res.status(500).json({
+      message: error,
+    });
+  }
+};
+
+export const register = async (req, res) => {
+  try {
+    const body = req.body;
+    const error = registerSchema(body);
+
+    if (error) {
+      return res.status(400).json({
+        error: 1,
+        message: error.message,
+      });
+    }
+
+    const userExist = await User.findOne({ [body.auth_type]: body.account });
+
+    if (userExist) {
+      return res.status(400).json({
+        error: 1,
+        message: "Tài khoản đã tồn tại trong hệ thống",
+      });
+    }
+
+    const { account, auth_type, full_name, password } = body;
+
+    const user = await User.create({
+      full_name: full_name,
+      [auth_type]: account,
+      password: password,
+    });
+
+    const token = CreateJwt({ _id: user._id.toString() });
+
+    return res.status(200).json({
+      error: 0,
+      user: {
+        fullName: user.full_name,
+        email: user.email || null,
+        avatar: user.avatar,
+        accessToken: token,
+      },
+      message: "Đăng ký thành công",
+    });
+  } catch (error) {
+    console.log("error: register", error);
+    res.status(500).json({
+      error: 1,
       message: error,
     });
   }
