@@ -14,3 +14,12 @@ export const getAll = async (req, res) => {
     });
   }
 };
+export const getOne = async (req,res) => {
+  try{
+    
+  }catch (error) {
+    res.status(500).send({
+      message: error,
+    });
+  }
+}
