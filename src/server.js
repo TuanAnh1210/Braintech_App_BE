@@ -13,6 +13,7 @@ import lessonsRouter from "./routers/lessons";
 import usersRouter from "./routers/users";
 import statusCourseRouter from "./routers/statusCourse";
 import commentRoute from "./routers/comments";
+import noteRoute from "./routers/note";
 
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
@@ -47,6 +48,7 @@ app.use("/api/cate", cateRouter);
 app.use("/api/chapters", chaptersRouter);
 app.use("/upload", uploadRouter);
 app.use("/api/comments", commentRoute);
+app.use("/api/notes", noteRoute);
 mongoose
   .connect("mongodb://127.0.0.1:27017/braintech")
   .then(() => console.log("Connected to DB"));
