@@ -14,14 +14,15 @@ import usersRouter from "./routers/users";
 import statusCourseRouter from "./routers/statusCourse";
 import commentRoute from "./routers/comments";
 import noteRoute from "./routers/note";
-import cors from "cors"
+import quizzsRoute from "./routers/quizzs";
+import cors from "cors";
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
 
 const app = express();
 const port = 8080;
 
-app.use(cors())
+app.use(cors());
 // Middleware
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -50,6 +51,7 @@ app.use("/api/chapters", chaptersRouter);
 app.use("/upload", uploadRouter);
 app.use("/api/comments", commentRoute);
 app.use("/api/notes", noteRoute);
+app.use("/api/quizzs", quizzsRoute);
 mongoose
   .connect("mongodb://127.0.0.1:27017/braintech")
   .then(() => console.log("Connected to DB"));
