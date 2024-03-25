@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { getAll } from "../controllers/statusCourse";
+import { addCourseToSttCourse, getAll } from "../controllers/statusCourse";
 
 const statusCourseRouter = Router();
 
 statusCourseRouter.get("/", getAll);
+statusCourseRouter.post("/add", addCourseToSttCourse);
 
 export default statusCourseRouter;
