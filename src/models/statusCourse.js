@@ -12,10 +12,6 @@ const statusCourse = new Schema(
       ref: "users",
       require: true,
     },
-    status_learn: {
-      type: Boolean,
-      default: false,
-    },
   },
   {
     timestamps: true,
