@@ -14,6 +14,7 @@ import usersRouter from "./routers/users";
 import statusCourseRouter from "./routers/statusCourse";
 import commentRoute from "./routers/comments";
 import noteRoute from "./routers/note";
+import finishLessonRoute from "./routers/finishLesson";
 
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
@@ -43,6 +44,7 @@ app.use(express.static("src/public"));
 app.use("/api/courses", coursesRouter);
 app.use("/api/lessons", lessonsRouter);
 app.use("/api/sttCourse", statusCourseRouter);
+app.use("/api/finishLesson", finishLessonRoute);
 app.use("/api/user", usersRouter);
 app.use("/api/cate", cateRouter);
 app.use("/api/chapters", chaptersRouter);

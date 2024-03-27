@@ -18,7 +18,6 @@ export const addCourseToSttCourse = async (req, res) => {
     const { course_id, user_id } = req.body;
 
     const exist = await statusCourse.findOne({ course_id: course_id });
-    console.log(exist);
     if (!exist) {
       const data = new statusCourse({
         course_id: course_id,
