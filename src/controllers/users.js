@@ -1,5 +1,4 @@
 import User from "../models/users";
-
 import { loginSchema, registerSchema } from "../validations/user.validate";
 import CreateJwt, { comparePassword } from "../helper/utils";
 
@@ -117,3 +116,30 @@ export const register = async (req, res) => {
     });
   }
 };
+
+export const deleteUser = async (req, res) => {
+  try {
+    const findUser = await User.findById(req.params.id)
+    if (findUser){
+      const result = await User.deleteOne({ _id: req.params.id });
+      return res.status(200).json({
+        error: 0,
+        data: findUser,
+        result: result,
+        message: "Xóa thành công",
+      });
+    }
+    else {
+      res.status(404).json({
+        error: 1,
+        message: "Không tìm thấy người dùng",
+      });
+    }
+  } catch (error) {
+    console.log("Error: delete user", error);
+    res.status(500).json({
+      error: 1,
+      message: error,
+    });
+  }
+}
