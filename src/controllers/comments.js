@@ -1,9 +1,15 @@
 import Comment from "../models/comment";
-
+import User from "../models/users"
+import Lessons from "../models/lessons";
 export const getAllCommentsByLesson = async (req, res) => {
   try {
-    const { id } = req.params;
-    const comments = await Comment.find();
+    const commentDatas = await Comment.find();
+    let comments = []
+    for(let item of commentDatas){
+      const { full_name } = await User.findById(item.user_id)
+      const { name } = await Lessons.findById(item.lesson_id)
+      comments.push({_id: item._id, content: item._doc.content, user: full_name, lessonName: name})
+    }
     res.status(200).send({
       message: "Lấy thành công toàn bộ bình luận",
       data: comments,
@@ -18,10 +24,11 @@ export const getCommentById = async (req, res) => {
   try {
     const { id } = req.params;
     const comments = await Comment.findById(id);
-    console.log(comments)
+    const { phone, full_name } = await User.findById(comments.user_id)
+    const { name } = await Lessons.findById(comments.lesson_id)
     res.status(200).send({
       message: "Lấy thành công bình luận",
-      data: comments,
+      data: {content: comments._doc.content, phone: phone, user: full_name, lessonName: name},
     });
   } catch (e) {
     res.status(500).send({
