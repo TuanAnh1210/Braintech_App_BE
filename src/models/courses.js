@@ -37,6 +37,11 @@ const Courses = new Schema(
         require: true,
       },
     ],
+    isPublic: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
   },
   { timestamps: true, versionKey: false }
 );
