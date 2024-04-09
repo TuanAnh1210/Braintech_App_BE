@@ -17,3 +17,23 @@ export const createQuizz = async (req, res) => {
         });
     }
 };
+
+export const getQuizzsByLessonId = async (req, res) => {
+    try {
+        const lessonId = req.params.lessonId;
+
+        const quizzs = await Quizzs.find({
+            lesson_id: lessonId,
+        });
+
+        res.status(200).send({
+            message: 'Get Success!',
+            data: quizzs,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            message: error,
+        });
+    }
+};
