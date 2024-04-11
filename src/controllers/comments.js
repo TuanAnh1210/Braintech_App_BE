@@ -35,3 +35,16 @@ export const postComment = async (req, res) => {
     });
   }
 };
+export const deleteComment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Comment.findByIdAndDelete(id);
+    res.status(200).send({
+      message: "Xóa bình luận thành công",
+    });
+  } catch (e) {
+    res.status(500).send({
+      message: e.message,
+    });
+  }
+};
