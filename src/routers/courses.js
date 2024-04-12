@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { upload } from '../middlewares/multer.middleware';
+import { upload, uploadVideo } from '../middlewares/multer.middleware';
 import * as controllerCourses from '../controllers/courses';
 
 const coursesRouter = express.Router();
@@ -13,5 +13,6 @@ coursesRouter.post('/create', controllerCourses.createCourse);
 coursesRouter.put('/:_id/update', controllerCourses.updateCourse);
 coursesRouter.delete('/:_id/delete', controllerCourses.deleteCourse);
 coursesRouter.post('/upload', upload.single('image'), controllerCourses.uploadImage);
+coursesRouter.post('/upload-video', uploadVideo.single('video'), controllerCourses.uploadVideo);
 
 export default coursesRouter;

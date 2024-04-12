@@ -1,10 +1,10 @@
 import createError from 'http-errors';
+import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import mongoose from 'mongoose';
 import express from 'express';
 import cors from 'cors';
-import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
-import { dirname } from 'path';
 
 import uploadRouter from './routers/upload';
 import coursesRouter from './routers/courses';

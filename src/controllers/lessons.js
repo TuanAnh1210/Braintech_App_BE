@@ -1,3 +1,4 @@
+import Chapters from '../models/chapters';
 import Lessons from '../models/lessons';
 
 export const getAll = async (req, res) => {
@@ -9,6 +10,30 @@ export const getAll = async (req, res) => {
             lessons,
         });
     } catch (error) {
+        res.status(500).send({
+            message: error,
+        });
+    }
+};
+
+export const createLesson = async (req, res) => {
+    try {
+        const { chapter_id, ...body } = req.body;
+
+        const lesson = await Lessons.create({ chapter_id, ...body });
+
+        await Chapters.findByIdAndUpdate(chapter_id, {
+            $addToSet: {
+                lessons: lesson._id,
+            },
+        });
+
+        res.status(200).send({
+            message: 'Create Lesson Success!',
+            data: body,
+        });
+    } catch (error) {
+        console.log(error);
         res.status(500).send({
             message: error,
         });

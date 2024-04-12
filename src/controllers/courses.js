@@ -64,7 +64,7 @@ export const getCourseById = async (req, res) => {
 
         const selectedCourse = await Courses.findById(_id).populate({
             path: 'chapters',
-            select: ['name', 'lessons'],
+            select: ['name', 'isPublic', 'isFree', 'lessons'],
             populate: {
                 path: 'lessons',
                 select: ['name', 'path_video'], // Chọn trường 'title' từ collection Lesson
@@ -97,13 +97,48 @@ export const uploadImage = async (req, res) => {
         const frontImageB64 = Buffer.from(file.buffer).toString('base64');
         const frontImageDataURI = 'data:' + file.mimetype + ';base64,' + frontImageB64;
 
-        const result = await cloudinary.uploader.upload(frontImageDataURI, {
+        const result = await cloudinary.uploader.upload_large(frontImageDataURI, {
             resource_type: 'image',
         });
 
         res.status(200).send({
             message: 'Upload Image successfully',
             data: result,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            message: error,
+        });
+    }
+};
+
+export const uploadVideo = async (req, res) => {
+    try {
+        const file = req.file;
+
+        if (!file) {
+            // Validate dữ liệu tải lên
+            res.status(400).json({ message: 'Please upload an video.' });
+            return null;
+        }
+
+        const result = await new Promise((resolve, reject) => {
+            cloudinary.uploader.upload_large(
+                'data:video/mp4;base64,' + file.buffer.toString('base64'),
+                { resource_type: 'video' },
+                (error, result) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    resolve(result);
+                },
+            );
+        });
+
+        res.status(200).send({
+            message: 'Upload Video Successfully',
+            playback_url: result.playback_url,
         });
     } catch (error) {
         console.log(error);
