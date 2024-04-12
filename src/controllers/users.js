@@ -18,6 +18,7 @@ export const getAll = async (req, res) => {
 };
 
 export const login = async (req, res) => {
+
   try {
     const { account, auth_type, password } = req.body;
 
@@ -38,9 +39,9 @@ export const login = async (req, res) => {
         message: "Tài khoản hoặc mật khẩu không chính xác",
       });
     }
-
+    console.log(typeof (user.password));
     const pwStatus = await comparePassword(password, user.password);
-
+    console.log(typeof (password));
     if (!pwStatus) {
       return res.status(400).json({
         error: 1,
@@ -120,7 +121,7 @@ export const register = async (req, res) => {
 export const deleteUser = async (req, res) => {
   try {
     const findUser = await User.findById(req.params.id)
-    if (findUser){
+    if (findUser) {
       const result = await User.deleteOne({ _id: req.params.id });
       return res.status(200).json({
         error: 0,

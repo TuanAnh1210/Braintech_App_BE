@@ -36,3 +36,31 @@ export const createNote = async (req, res) => {
     });
   }
 };
+export const updateNote = async (req, res) => {
+  try {
+    console.log(123, req.body);
+    await Notes.findByIdAndUpdate(req.params.note_id, req.body, {
+      new: true,
+    });
+    res.status(200).send({
+      message: "Chỉnh sửa thành công ghi chú",
+    });
+  } catch (e) {
+    res.status(500).send({
+      message: e.message,
+    });
+  }
+};
+export const deleteNote = async (req, res) => {
+  try {
+    const findNote = await Notes.findByIdAndDelete(req.params.note_id)
+
+    res.status(200).send({
+      message: "Xóa thành công ghi chú",
+    });
+  } catch (e) {
+    res.status(500).send({
+      message: e.message,
+    });
+  }
+};
