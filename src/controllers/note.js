@@ -1,10 +1,11 @@
 import Notes from "../models/note";
+import { updateNoteSchema } from "../validations/note.validate";
 
 export const getAllByClient = async (req, res) => {
   try {
     const { user_id } = req.params;
     const list = await Notes.find({ user_id: user_id });
-    // console.log(list);
+
     res.status(200).send({
       message: "Lấy thành công dữ liệu",
       data: list,
@@ -17,6 +18,7 @@ export const getAllByClient = async (req, res) => {
 };
 
 export const createNote = async (req, res) => {
+
   try {
     const { content } = req.body;
     const { lesson_id } = req.body;
@@ -37,8 +39,16 @@ export const createNote = async (req, res) => {
   }
 };
 export const updateNote = async (req, res) => {
+
   try {
-    console.log(123, req.body);
+    // const error = updateNoteSchema(req.body);
+
+    // if (error) {
+    //   return res.status(400).json({
+    //     error: 1,
+    //     message: error.message,
+    //   });
+    // }
     await Notes.findByIdAndUpdate(req.params.note_id, req.body, {
       new: true,
     });

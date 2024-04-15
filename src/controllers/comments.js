@@ -1,6 +1,7 @@
 import Comment from "../models/comment";
 
 export const getAllCommentsByLesson = async (req, res) => {
+  console.log(req.params);
   try {
     const { id } = req.params;
     const comments = await Comment.find();
@@ -18,7 +19,7 @@ export const getCommentById = async (req, res) => {
   try {
     const { id } = req.params;
     const comments = await Comment.findById(id);
-    console.log(comments)
+    //console.log(comments)
     res.status(200).send({
       message: "Lấy thành công bình luận",
       data: comments,
@@ -53,7 +54,7 @@ export const postComment = async (req, res) => {
 export const deleteComment = async (req, res) => {
   try {
     const findCmt = await Comment.findById(req.params.id)
-    if (findCmt){
+    if (findCmt) {
       const result = await Comment.deleteOne({ _id: req.params.id });
       return res.status(200).json({
         error: 0,
@@ -80,8 +81,8 @@ export const editComment = async (req, res) => {
   try {
     const findCmt = await Comment.findById(req.params.id)
     const data = req.body
-    if (findCmt){
-      const result = await User.patch({ _id: req.params.id },data);
+    if (findCmt) {
+      const result = await User.patch({ _id: req.params.id }, data);
       return res.status(200).json({
         error: 0,
         data: findCmt,
