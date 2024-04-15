@@ -11,5 +11,10 @@ const finishLesson = new Schema({
     ref: "users",
     require: true,
   },
+  course_id: {
+    type: Schema.Types.ObjectId,
+    ref: "courses",
+    require: true,
+  },
 });
 export default model("finishlessons", finishLesson);
