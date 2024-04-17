@@ -1,5 +1,5 @@
 import Notes from "../models/note";
-import { updateNoteSchema } from "../validations/note.validate";
+import { createNoteSchema, updateNoteSchema } from "../validations/note.validate";
 
 export const getAllByClient = async (req, res) => {
   try {
@@ -20,9 +20,11 @@ export const getAllByClient = async (req, res) => {
 export const createNote = async (req, res) => {
 
   try {
+
     const { content } = req.body;
     const { lesson_id } = req.body;
     const { user_id } = req.body;
+
     const newNote = new Notes({
       text: content,
       lesson_id: lesson_id,
