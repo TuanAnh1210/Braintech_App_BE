@@ -36,3 +36,12 @@ export const createNote = async (req, res) => {
     });
   }
 };
+export const deleteNote = async (req, res) => {
+  try {
+    const { note_id } = req.params;
+    await Notes.findByIdAndDelete(note_id);
+    res.status(200).send({
+      message: "Xóa thành công",
+    });
+  } catch (e) {}
+};

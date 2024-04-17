@@ -5,10 +5,10 @@ export const getAllCommentsByLesson = async (req, res) => {
   try {
     const commentDatas = await Comment.find();
     let comments = []
-    for(let item of commentDatas){
+    for (let item of commentDatas) {
       const { full_name } = await User.findById(item.user_id)
       const { name } = await Lessons.findById(item.lesson_id)
-      comments.push({_id: item._id, content: item._doc.content, user: full_name, lessonName: name})
+      comments.push({ _id: item._id, content: item._doc.content, user: full_name, lessonName: name })
     }
     res.status(200).send({
       message: "Lấy thành công toàn bộ bình luận",
@@ -28,7 +28,7 @@ export const getCommentById = async (req, res) => {
     const { name } = await Lessons.findById(comments.lesson_id)
     res.status(200).send({
       message: "Lấy thành công bình luận",
-      data: {content: comments._doc.content, phone: phone, user: full_name, lessonName: name},
+      data: { content: comments._doc.content, phone: phone, user: full_name, lessonName: name },
     });
   } catch (e) {
     res.status(500).send({
@@ -59,8 +59,8 @@ export const postComment = async (req, res) => {
 };
 export const deleteComment = async (req, res) => {
   try {
-    const findCmt = await Comment.findById(req.params.id)
-    if (findCmt){
+    const findCmt = await Comment.findById(req.params.id);
+    if (findCmt) {
       const result = await Comment.deleteOne({ _id: req.params.id });
       return res.status(200).json({
         error: 0,
@@ -68,8 +68,7 @@ export const deleteComment = async (req, res) => {
         result: result,
         message: "Xóa thành công",
       });
-    }
-    else {
+    } else {
       res.status(404).json({
         error: 1,
         message: "Không tìm thấy bình luận",
@@ -82,21 +81,20 @@ export const deleteComment = async (req, res) => {
       message: error,
     });
   }
-}
+};
 export const editComment = async (req, res) => {
   try {
-    const findCmt = await Comment.findById(req.params.id)
-    const data = req.body
-    if (findCmt){
-      const result = await User.patch({ _id: req.params.id },data);
+    const findCmt = await Comment.findById(req.params.id);
+    const data = req.body;
+    if (findCmt) {
+      const result = await User.patch({ _id: req.params.id }, data);
       return res.status(200).json({
         error: 0,
         data: findCmt,
         result: result,
         message: "Sửa thành công",
       });
-    }
-    else {
+    } else {
       res.status(404).json({
         error: 1,
         message: "Không tìm thấy bình luận",
@@ -109,5 +107,4 @@ export const editComment = async (req, res) => {
       message: error,
     });
   }
-}
-
+};
