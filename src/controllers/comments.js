@@ -59,7 +59,7 @@ export const postComment = async (req, res) => {
 };
 export const deleteComment = async (req, res) => {
   try {
-    const findCmt = await Comment.findById(req.params.id);
+    const findCmt = await Comment.findById(req.params.id)
     if (findCmt) {
       const result = await Comment.deleteOne({ _id: req.params.id });
       return res.status(200).json({
@@ -68,7 +68,8 @@ export const deleteComment = async (req, res) => {
         result: result,
         message: "Xóa thành công",
       });
-    } else {
+    }
+    else {
       res.status(404).json({
         error: 1,
         message: "Không tìm thấy bình luận",
@@ -81,11 +82,11 @@ export const deleteComment = async (req, res) => {
       message: error,
     });
   }
-};
+}
 export const editComment = async (req, res) => {
   try {
-    const findCmt = await Comment.findById(req.params.id);
-    const data = req.body;
+    const findCmt = await Comment.findById(req.params.id)
+    const data = req.body
     if (findCmt) {
       const result = await User.patch({ _id: req.params.id }, data);
       return res.status(200).json({
@@ -94,7 +95,8 @@ export const editComment = async (req, res) => {
         result: result,
         message: "Sửa thành công",
       });
-    } else {
+    }
+    else {
       res.status(404).json({
         error: 1,
         message: "Không tìm thấy bình luận",
@@ -107,4 +109,5 @@ export const editComment = async (req, res) => {
       message: error,
     });
   }
-};
+}
+

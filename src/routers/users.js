@@ -10,4 +10,4 @@ usersRouter.post("/login", login);
 usersRouter.post("/register", register);
 usersRouter.patch("/update", updateUser);
 usersRouter.delete("/delete/:id", checkAdmin, deleteUser)
-export default usersRouter;
+export default usersRouter; 
