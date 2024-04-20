@@ -1,35 +1,35 @@
-import mongoose from "mongoose";
-import mongoosePaginate from "mongoose-paginate-v2";
+import { Schema, model } from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
 
-const { Schema } = mongoose;
-
-const Quizzs = new Schema(
-  {
-    name: {
-      type: String,
-      required: true,
+const Quizzs = new Schema({
+    title: {
+        type: String,
+        require: true,
     },
-    lesson_id: {
-      type: Schema.Types.ObjectId,
-      ref: "lessons",
-      required: true,
-    },
-    answer: [
-      {
-        solution: {
-          type: String,
-          required: true,
+    answers: [
+        {
+            type: {
+                code_answer: String,
+                title_answer: String,
+                answer: Boolean,
+            },
+            require: true,
         },
-        isCorrect: {
-          type: Boolean,
-          required: true,
-        },
-      },
     ],
-  },
-  { timestamps: true, versionKey: false }
-);
+    lesson_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'lessons',
+        required: true,
+    },
+});
 
-Quizzs.plugin(mongoosePaginate);
+// Quizzs.pre('save', async function (next) {
+//     try {
+//         this.answers.code_answer = uuidv4();
+//         next();
+//     } catch (err) {
+//         next(err);
+//     }
+// });
 
-export default mongoose.model("quizzs", Quizzs);
+export default model('quizzs', Quizzs);

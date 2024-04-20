@@ -1,13 +1,16 @@
 import Categories from "../models/categories";
 
-export const get = async (req, res) => {
+export const getAll = async (req, res) => {
   try {
-    const data = await Categories.find();
+    const data = await Categories.find({});
+
     if (!data) {
       return res.status(400).send({
         message: "Category does not exist",
+        data: [],
       });
     }
+
     res.send({
       message: "Get Categories successfully",
       data,
