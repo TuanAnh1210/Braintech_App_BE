@@ -15,12 +15,15 @@ import usersRouter from './routers/users';
 import statusCourseRouter from './routers/statusCourse';
 import quizzsRouter from './routers/quizzs';
 
+import quizzsRoute from "./routers/quizzs";
+import cors from "cors";
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
 
 const app = express();
 const port = 8080;
 
+app.use(cors());
 // Middleware
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
