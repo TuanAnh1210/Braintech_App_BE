@@ -1,5 +1,4 @@
 import createError from 'http-errors';
-import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import mongoose from 'mongoose';
@@ -15,32 +14,16 @@ import usersRouter from './routers/users';
 import statusCourseRouter from './routers/statusCourse';
 import quizzsRouter from './routers/quizzs';
 
-import quizzsRoute from "./routers/quizzs";
-import cors from "cors";
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
 
 const app = express();
 const port = 8080;
 
-app.use(cors());
-// Middleware
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
-// parse application/json
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use(cors());
-
-// app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "*"); // Thay thế bằng nguồn gốc của trang web hiện tại
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept"
-//   );
-//   next();
-// });
-
 // Static
 app.use(express.static('src/public'));
 
