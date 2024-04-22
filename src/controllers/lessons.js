@@ -59,12 +59,33 @@ export const updateLessonById = async (req, res) => {
         });
     }
 };
-export const getOne = async (req,res) => {
-  try{
-    
-  }catch (error) {
-    res.status(500).send({
-      message: error,
-    });
-  }
-}
+export const getOne = async (req, res) => {
+    try {
+    } catch (error) {
+        res.status(500).send({
+            message: error,
+        });
+    }
+};
+export const getNextLesson = async (req, res) => {
+    try {
+        const { curId } = req.body;
+        const nextLesson = await Lessons.find({ _id: { $lt: curId } })
+            .sort({ _id: -1 })
+            .limit(1);
+        if (nextLesson.length > 0) {
+            res.status(200).send({
+                message: 'Get next lesson successfully',
+                nextLesson,
+            });
+        } else {
+            res.status(404).send({
+                message: 'Get next lesson failed',
+            });
+        }
+    } catch (error) {
+        res.status(500).send({
+            message: error,
+        });
+    }
+};
