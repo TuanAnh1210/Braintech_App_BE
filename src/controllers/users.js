@@ -1,7 +1,8 @@
 import User from "../models/users";
 import { forgetPasswordSchema, loginSchema, registerSchema } from "../validations/user.validate";
 import CreateJwt, { comparePassword } from "../helper/utils";
-import bcrypt from 'bcryptjs';
+import "dotenv/config"
+import jwt from "jsonwebtoken";
 
 export const getAll = async (req, res) => {
   try {
@@ -57,6 +58,7 @@ export const login = async (req, res) => {
       user: {
         fullName: user.full_name,
         email: user.email || null,
+        phone: user.phone,
         avatar: user.avatar,
         accessToken: token,
       },
@@ -176,6 +178,35 @@ export const deleteUser = async (req, res) => {
     }
   } catch (error) {
     console.log("Error: delete user", error);
+    res.status(500).json({
+      error: 1,
+      message: error,
+    });
+  }
+}
+export const updateUser = async (req, res) => {
+  try {
+    const token = req.headers.authorization.replace("Bearer ", "");
+    if (!token) return res.status(500).json({ message: "Token not provide!" })
+    const { data: { _id } } = jwt.verify(token, process.env.JWT_SECRET);
+    const findUser = await User.findById(_id)
+    const data = req.body
+    if (findUser) {
+      const result = await User.findOneAndUpdate({ _id: _id }, data, { new: true });
+      return res.status(200).json({
+        error: 0,
+        result: result,
+        message: "Sửa thành công",
+      });
+    }
+    else {
+      res.status(404).json({
+        error: 1,
+        message: "Không tìm thấy người dùng",
+      });
+    }
+  } catch (error) {
+    console.log("Error: update user", error);
     res.status(500).json({
       error: 1,
       message: error,
