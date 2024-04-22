@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
     deleteComment,
     editComment,
+    getAllComments,
     getAllCommentsByLesson,
     getCommentById,
     postComment,
@@ -10,6 +11,7 @@ import { checkAdmin } from '../middlewares/adminMiddleware';
 
 const commentRoute = new Router();
 
+commentRoute.get('/', getAllComments);
 commentRoute.get('/lesson/:id', getAllCommentsByLesson);
 commentRoute.get('/:id', getCommentById);
 commentRoute.post('/', postComment);

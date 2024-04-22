@@ -1,6 +1,25 @@
 import Comment from '../models/comment';
 import User from '../models/users';
 import Lessons from '../models/lessons';
+export const getAllComments = async (req, res) => {
+    try {
+        const commentDatas = await Comment.find();
+        let comments = []
+        for (let item of commentDatas) {
+            const { full_name } = await User.findById(item.user_id)
+            const { name } = await Lessons.findById(item.lesson_id)
+            comments.push({ _id: item._id, text: item._doc.text, user: full_name, lessonName: name })
+        }
+        res.status(200).send({
+            message: "Lấy thành công toàn bộ bình luận",
+            data: comments,
+        });
+    } catch (e) {
+        res.status(500).send({
+            message: e.message,
+        });
+    }
+};
 export const getAllCommentsByLesson = async (req, res) => {
     try {
         const lesson_id = req.params.id;
@@ -23,7 +42,7 @@ export const getCommentById = async (req, res) => {
         const { name } = await Lessons.findById(comments.lesson_id);
         res.status(200).send({
             message: 'Lấy thành công bình luận',
-            data: { content: comments._doc.content, phone: phone, user: full_name, lessonName: name },
+            data: { text: comments._doc.text, phone: phone, user: full_name, lessonName: name },
         });
     } catch (e) {
         res.status(500).send({
@@ -80,10 +99,13 @@ export const deleteComment = async (req, res) => {
 export const editComment = async (req, res) => {
     try {
         const findCmt = await Comment.findById(req.params.id);
-        const data = req.body;
-        console.log(data);
+        const { content } = req.body;
+        const newData = {
+            text: content
+        }
         if (findCmt) {
-            const result = await User.patch({ _id: req.params.id }, data);
+            const result = await Object.assign(findCmt, newData)
+            await result.save()
             return res.status(200).json({
                 error: 0,
                 data: findCmt,
