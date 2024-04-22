@@ -44,19 +44,22 @@ export const updateNote = async (req, res) => {
 
   try {
     // const error = updateNoteSchema(req.body);
-
+    // console.log(error);
     // if (error) {
     //   return res.status(400).json({
     //     error: 1,
     //     message: error.message,
     //   });
     // }
+
+
     await Notes.findByIdAndUpdate(req.params.note_id, req.body, {
       new: true,
     });
     res.status(200).send({
       message: "Chỉnh sửa thành công ghi chú",
     });
+
   } catch (e) {
     res.status(500).send({
       message: e.message,

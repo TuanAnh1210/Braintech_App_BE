@@ -1,6 +1,7 @@
 import User from "../models/users";
-import { loginSchema, registerSchema } from "../validations/user.validate";
+import { forgetPasswordSchema, loginSchema, registerSchema } from "../validations/user.validate";
 import CreateJwt, { comparePassword } from "../helper/utils";
+import bcrypt from 'bcryptjs';
 
 export const getAll = async (req, res) => {
   try {
@@ -117,7 +118,44 @@ export const register = async (req, res) => {
     });
   }
 };
+export const ForgetPassword = async (req, res) => {
 
+  try {
+    const error = forgetPasswordSchema(req.body);
+    console.log(error);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req?.body?.password, salt);
+
+    if (error) {
+      return res.status(400).json({
+        error: 1,
+        message: error.message,
+      });
+    }
+    const userUpdate = {
+      _id: req?.body?._id,
+      full_name: req?.full_name,
+      phone: req?.body?.phone,
+      password: hashedPassword,
+      avatar: req?.body?.avatar,
+      createAt: req?.body?.createAt,
+      updateAt: req?.body?.updateAt
+    }
+    await User.findByIdAndUpdate(req.params.id, userUpdate, {
+      new: true,
+    });
+
+    return res.status(200).json({
+      message: "Đã thay đổi mật khẩu thành công!",
+      user: userUpdate
+    });
+  } catch (error) {
+    console.log("error: login", error);
+    res.status(500).json({
+      message: error,
+    });
+  }
+};
 export const deleteUser = async (req, res) => {
   try {
     const findUser = await User.findById(req.params.id)
