@@ -137,12 +137,14 @@ export const ForgetPassword = async (req, res) => {
     const userUpdate = {
       _id: req?.body?._id,
       full_name: req?.full_name,
+      isAdmin: false,
       phone: req?.body?.phone,
       password: hashedPassword,
       avatar: req?.body?.avatar,
       createAt: req?.body?.createAt,
       updateAt: req?.body?.updateAt
     }
+
     await User.findByIdAndUpdate(req.params.id, userUpdate, {
       new: true,
     });

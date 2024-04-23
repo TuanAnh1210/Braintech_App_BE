@@ -90,6 +90,7 @@ export const forgetPasswordSchema = (data) => {
     email: Joi.string(),
     avatar: Joi.string(),
     phone: Joi.string(),
+    isAdmin: false,
     createdAt: Joi.string(),
     updatedAt: Joi.string(),
     password: Joi.string().min(6).max(50).required().messages({
