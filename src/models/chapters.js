@@ -17,11 +17,6 @@ const Chapters = new Schema({
             required: true,
         },
     ],
-    isFree: {
-        type: Boolean,
-        default: false,
-        required: true,
-    },
     isPublic: {
         type: Boolean,
         default: false,
