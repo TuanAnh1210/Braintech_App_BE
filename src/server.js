@@ -13,9 +13,7 @@ import lessonsRouter from './routers/lessons';
 import usersRouter from './routers/users';
 import statusCourseRouter from './routers/statusCourse';
 import quizzsRouter from './routers/quizzs';
-
-import quizzsRoute from "./routers/quizzs";
-import cors from "cors";
+import commentRoute from './routers/comments';
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
 
@@ -36,6 +34,7 @@ app.use('/api/sttCourse', statusCourseRouter);
 app.use('/api/user', usersRouter);
 app.use('/api/quizzs', quizzsRouter);
 app.use('/api/categories', cateRouter);
+app.use('/api/comments', commentRoute);
 app.use('/api/chapters', chaptersRouter);
 app.use('/upload', uploadRouter);
 app.use('/api/finishLesson', finishLessonRoute);
