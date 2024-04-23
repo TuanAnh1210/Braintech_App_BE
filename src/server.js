@@ -14,6 +14,8 @@ import usersRouter from './routers/users';
 import statusCourseRouter from './routers/statusCourse';
 import quizzsRouter from './routers/quizzs';
 import commentRoute from './routers/comments';
+import finishLessonRoute from './routers/finishLesson';
+import noteRoute from './routers/note';
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
 
