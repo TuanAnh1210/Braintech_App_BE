@@ -110,4 +110,21 @@ export const createPaymentUrl = async (req, res) => {
     }
 };
 
-export const callbackPayment = async (req, res) => {};
+export const callbackPayment = async (req, res) => {
+    const { vnp_TxnRef: transaction_id, vnp_OrderInfo: transaction_content, vnp_TransactionStatus: status } = req.query;
+
+    const transaction = await PaymentHistory.findOne({ transaction_id, status: 'PENDING' });
+
+    if (!transaction) {
+        res.status(400).send({
+            message: 'The transaction already exists or has been processed.',
+        });
+        return null;
+    }
+
+    await PaymentHistory.updateOne({ transaction_id }, { transaction_content, status: 'SUCCESS' });
+
+    res.status(200).send({
+        message: 'Payment Success!',
+    });
+};
