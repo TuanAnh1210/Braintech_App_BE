@@ -83,3 +83,32 @@ export const registerSchema = (data) => {
 
   if (error) return { message: error.message };
 };
+export const forgetPasswordSchema = (data) => {
+  const schema = Joi.object({
+    _id: Joi.string(),
+    full_name: Joi.string(),
+    email: Joi.string(),
+    avatar: Joi.string(),
+    phone: Joi.string(),
+    createdAt: Joi.string(),
+    updatedAt: Joi.string(),
+    password: Joi.string().min(6).max(50).required().messages({
+      "string.empty": "Vui lòng nhập mật khẩu",
+      "string.min": "Mật khẩu phải chứa ít nhất {#limit} ký tự",
+      "string.max": "Mật khẩu không được dài quá {#limit} ký tự",
+      "any.required": "Mật khẩu là trường bắt buộc",
+    }),
+    password_confirm: Joi.string()
+      .required()
+      .valid(Joi.ref("password"))
+      .messages({
+        "string.empty": "Vui lòng nhập lại mật khẩu",
+        "any.only": "Mật khẩu nhập lại không khớp",
+        "any.required": "Vui lòng nhập lại mật khẩu",
+      }),
+  });
+
+  const { error } = schema.validate(data);
+
+  if (error) return { message: error.message };
+};
