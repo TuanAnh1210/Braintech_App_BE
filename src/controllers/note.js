@@ -24,7 +24,7 @@ export const createNote = async (req, res) => {
     const { content } = req.body;
     const { lesson_id } = req.body;
     const { user_id } = req.body;
-
+    console.log(req.body);
     const newNote = new Notes({
       text: content,
       lesson_id: lesson_id,
