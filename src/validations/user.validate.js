@@ -63,13 +63,13 @@ export const registerSchema = (data) => {
       "string.empty": "Vui lòng nhập họ và tên",
       "any.required": "Họ và tên là trường bắt buộc",
     }),
-    password: Joi.string().min(6).max(50).required().messages({
+    password: Joi.string().trim().min(6).max(50).required().messages({
       "string.empty": "Vui lòng nhập mật khẩu",
-      "string.min": "Mật khẩu phải chứa ít nhất {#limit} ký tự",
+      "string.min": `Mật khẩu phải chứa ít nhất {#limit} ký tự`,
       "string.max": "Mật khẩu không được dài quá {#limit} ký tự",
       "any.required": "Mật khẩu là trường bắt buộc",
     }),
-    password_confirm: Joi.string()
+    password_confirm: Joi.string().trim()
       .required()
       .valid(Joi.ref("password"))
       .messages({

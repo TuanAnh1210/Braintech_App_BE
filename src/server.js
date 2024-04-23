@@ -12,6 +12,7 @@ import chaptersRouter from './routers/chapters';
 import lessonsRouter from './routers/lessons';
 import usersRouter from './routers/users';
 import statusCourseRouter from './routers/statusCourse';
+import notesRouter from './routers/note'
 import quizzsRouter from './routers/quizzs';
 import commentRoute from './routers/comments';
 import finishLessonRoute from './routers/finishLesson';
@@ -31,6 +32,7 @@ app.use(express.static('src/public'));
 
 // Router
 app.use('/api/courses', coursesRouter);
+app.use('/api/notes', notesRouter);
 app.use('/api/lessons', lessonsRouter);
 app.use('/api/sttCourse', statusCourseRouter);
 app.use('/api/user', usersRouter);

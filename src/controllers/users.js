@@ -2,6 +2,7 @@ import User from "../models/users";
 import { forgetPasswordSchema, loginSchema, registerSchema } from "../validations/user.validate";
 import CreateJwt, { comparePassword } from "../helper/utils";
 import "dotenv/config"
+import bcrypt from 'bcrypt'
 import jwt from "jsonwebtoken";
 
 export const getAll = async (req, res) => {
@@ -124,7 +125,6 @@ export const ForgetPassword = async (req, res) => {
 
   try {
     const error = forgetPasswordSchema(req.body);
-    console.log(error);
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req?.body?.password, salt);
 
