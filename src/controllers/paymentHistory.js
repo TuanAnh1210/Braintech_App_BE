@@ -1,0 +1,113 @@
+import moment from 'moment';
+import querystring from 'qs';
+import crypto from 'crypto';
+
+import PaymentHistory from '../models/paymentHistory';
+import Courses from '../models/courses';
+
+import 'dotenv/config';
+import { nextTimestamp, sortObject } from '../helper/utils';
+
+export const createPaymentUrl = async (req, res) => {
+    try {
+        const userId = '6627802b31fa3b1039ddaa9c';
+        const { courseId } = req.body;
+
+        if (!courseId) {
+            res.status(404).json({
+                message: 'Please provide a valid courseId.',
+            });
+            return null;
+        }
+
+        const course = await Courses.findOne({ _id: courseId }).select(['_id', 'price']);
+
+        if (!course) {
+            res.status(404).json({
+                message: 'The course does not exist or has been hidden.',
+            });
+            return null;
+        }
+
+        const transaction = await PaymentHistory.findOne({ user_id: userId, status: 'PENDING' }).select([
+            'payment_url',
+            'timestamp_expired',
+        ]);
+
+        if (transaction && transaction.timestamp_expired - new Date().getTime() > 1000) {
+            res.status(200).send({
+                message: 'Transaction Exist!',
+                url: transaction.payment_url,
+            });
+            return null;
+        }
+
+        process.env.TZ = 'Asia/Ho_Chi_Minh';
+
+        const date = new Date();
+        const createDate = moment(date).format('YYYYMMDDHHmmss');
+
+        const ipAddr =
+            req.headers['x-forwarded-for'] ||
+            req.connection.remoteAddress ||
+            req.socket.remoteAddress ||
+            req.connection.socket.remoteAddress;
+
+        const tmnCode = process.env.TMN_CODE_VNPAY;
+        const secretKey = process.env.SECRET_KEY_VNPAY;
+        let vnpUrl = process.env.URL_VNPAY;
+        const returnUrl = process.env.RETURN_URL;
+        const orderId = moment(date).format('DDHHmmss');
+        const amount = course.price;
+        const bankCode = 'VNBANK';
+
+        const locale = req.body.language || 'vn';
+
+        const currCode = 'VND';
+        let vnp_Params = {};
+        vnp_Params['vnp_Version'] = '2.1.0';
+        vnp_Params['vnp_Command'] = 'pay';
+        vnp_Params['vnp_TmnCode'] = tmnCode;
+        vnp_Params['vnp_Locale'] = locale;
+        vnp_Params['vnp_CurrCode'] = currCode;
+        vnp_Params['vnp_TxnRef'] = orderId;
+        vnp_Params['vnp_OrderInfo'] = 'Thanh toan cho ma GD:' + orderId;
+        vnp_Params['vnp_OrderType'] = 'other';
+        vnp_Params['vnp_Amount'] = amount * 100;
+        vnp_Params['vnp_ReturnUrl'] = returnUrl;
+        vnp_Params['vnp_IpAddr'] = ipAddr;
+        vnp_Params['vnp_CreateDate'] = createDate;
+        vnp_Params['vnp_BankCode'] = bankCode;
+
+        vnp_Params = sortObject(vnp_Params);
+
+        const signData = querystring.stringify(vnp_Params, { encode: false });
+        const hmac = crypto.createHmac('sha512', secretKey);
+        const signed = hmac.update(Buffer.from(signData, 'utf-8')).digest('hex');
+        vnp_Params['vnp_SecureHash'] = signed;
+        vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
+
+        await PaymentHistory.create({
+            transaction_id: orderId,
+            amount: amount,
+            user_id: userId,
+            course_id: courseId,
+            payment_url: vnpUrl,
+            transaction_content: '',
+            timestamp_expired: nextTimestamp(15),
+            status: 'PENDING',
+        });
+
+        res.status(200).send({
+            message: 'Create PaymentUrl Success!',
+            url: vnpUrl,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            message: error,
+        });
+    }
+};
+
+export const callbackPayment = async (req, res) => {};
