@@ -14,6 +14,8 @@ import usersRouter from './routers/users';
 import statusCourseRouter from './routers/statusCourse';
 import quizzsRouter from './routers/quizzs';
 
+import quizzsRoute from "./routers/quizzs";
+import cors from "cors";
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
 
@@ -36,6 +38,9 @@ app.use('/api/quizzs', quizzsRouter);
 app.use('/api/categories', cateRouter);
 app.use('/api/chapters', chaptersRouter);
 app.use('/upload', uploadRouter);
+app.use('/api/finishLesson', finishLessonRoute);
+app.use('/api/comments', commentRoute);
+app.use('/api/notes', noteRoute);
 
 app.use((req, res, next) => {
     next(createError.NotFound('This route does not exist.'));
