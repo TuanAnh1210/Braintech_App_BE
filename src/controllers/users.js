@@ -41,9 +41,11 @@ export const login = async (req, res) => {
                 message: 'Tài khoản hoặc mật khẩu không chính xác',
             });
         }
-        console.log(typeof user.password);
+
+
         const pwStatus = await comparePassword(password, user.password);
-        console.log(typeof password);
+
+
         if (!pwStatus) {
             return res.status(400).json({
                 error: 1,
@@ -51,9 +53,11 @@ export const login = async (req, res) => {
             });
         }
 
+
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         res.cookie('token', token, { httpOnly: true });
+
 
         return res.status(200).json({
             message: 'Đăng nhập thành công',
@@ -122,9 +126,13 @@ export const register = async (req, res) => {
         });
     }
 };
+
+
 export const ForgetPassword = async (req, res) => {
     try {
         const error = forgetPasswordSchema(req.body);
+        console.log(error);
+
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(req?.body?.password, salt);
 
@@ -158,6 +166,7 @@ export const ForgetPassword = async (req, res) => {
         });
     }
 };
+
 export const deleteUser = async (req, res) => {
     try {
         const findUser = await User.findById(req.params.id);
@@ -183,6 +192,7 @@ export const deleteUser = async (req, res) => {
         });
     }
 };
+
 export const updateUser = async (req, res) => {
     try {
         const token = req.headers.authorization.replace('Bearer ', '');
