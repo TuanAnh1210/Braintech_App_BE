@@ -7,7 +7,6 @@ import {
     getCommentById,
     postComment,
 } from '../controllers/comments';
-import { checkAdmin } from '../middlewares/adminMiddleware';
 
 const commentRoute = new Router();
 
