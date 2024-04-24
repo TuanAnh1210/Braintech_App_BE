@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/users';
 import 'dotenv/config';
+
 export const checkAdmin = async (req, res, next) => {
     const key = process.env.JWT_SECRET;
     if (!req.headers?.authorization) {

@@ -10,7 +10,7 @@ import { nextTimestamp, sortObject } from '../helper/utils';
 
 export const createPaymentUrl = async (req, res) => {
     try {
-        const userId = '6627802b31fa3b1039ddaa9c';
+        const userId = req.userId;
         const { courseId } = req.body;
 
         if (!courseId) {
@@ -29,15 +29,28 @@ export const createPaymentUrl = async (req, res) => {
             return null;
         }
 
-        const transaction = await PaymentHistory.findOne({ user_id: userId, status: 'PENDING' }).select([
+        const transaction = await PaymentHistory.findOne({ user_id: userId }).select([
+            'status',
+            'course_id',
             'payment_url',
             'timestamp_expired',
         ]);
 
-        if (transaction && transaction.timestamp_expired - new Date().getTime() > 1000) {
+        if (
+            transaction &&
+            transaction.status === 'PENDING' &&
+            transaction.timestamp_expired - new Date().getTime() > 1000
+        ) {
             res.status(200).send({
                 message: 'Transaction Exist!',
                 url: transaction.payment_url,
+            });
+            return null;
+        }
+
+        if (transaction && transaction.status === 'SUCCESS' && transaction.course_id == courseId) {
+            res.status(400).send({
+                message: 'You have purchased this course!',
             });
             return null;
         }
@@ -56,7 +69,7 @@ export const createPaymentUrl = async (req, res) => {
         const tmnCode = process.env.TMN_CODE_VNPAY;
         const secretKey = process.env.SECRET_KEY_VNPAY;
         let vnpUrl = process.env.URL_VNPAY;
-        const returnUrl = process.env.RETURN_URL;
+        const returnUrl = process.env.RETURN_URL + `/${courseId}`;
         const orderId = moment(date).format('DDHHmmss');
         const amount = course.price;
         const bankCode = 'VNBANK';
@@ -111,9 +124,35 @@ export const createPaymentUrl = async (req, res) => {
 };
 
 export const callbackPayment = async (req, res) => {
-    const { vnp_TxnRef: transaction_id, vnp_OrderInfo: transaction_content, vnp_TransactionStatus: status } = req.query;
+    const { vnp_TxnRef: transactionId, vnp_OrderInfo: transactionContent, vnp_TransactionStatus: status } = req.query;
 
-    const transaction = await PaymentHistory.findOne({ transaction_id, status: 'PENDING' });
+    let vnp_Params = req.query;
+
+    const secureHash = vnp_Params['vnp_SecureHash'];
+
+    delete vnp_Params['vnp_SecureHash'];
+    delete vnp_Params['vnp_SecureHashType'];
+
+    vnp_Params = sortObject(vnp_Params);
+
+    const secretKey = process.env.SECRET_KEY_VNPAY;
+
+    const signData = querystring.stringify(vnp_Params, { encode: false });
+    const hmac = crypto.createHmac('sha512', secretKey);
+    const signed = hmac.update(Buffer.from(signData, 'utf-8')).digest('hex');
+
+    if (secureHash !== signed) {
+        res.status(400).send({
+            message: 'Invalid transaction or processing error.',
+        });
+
+        return null;
+    }
+
+    const transaction = await PaymentHistory.findOne({
+        transaction_id: transactionId,
+        status: 'PENDING',
+    });
 
     if (!transaction) {
         res.status(400).send({
@@ -122,7 +161,25 @@ export const callbackPayment = async (req, res) => {
         return null;
     }
 
-    await PaymentHistory.updateOne({ transaction_id }, { transaction_content, status: 'SUCCESS' });
+    const transactionStatus = {
+        '00': 'Giao dịch thanh toán thành công',
+        '01': 'Giao dịch chưa hoàn tất',
+        '02': 'Giao dịch bị lỗi',
+        '04': 'Giao dịch đảo (Khách hàng đã bị trừ tiền tại Ngân hàng nhưng GD chưa thành công ở VNPAY)',
+        '05': 'VNPAY đang xử lý giao dịch này (GD hoàn tiền)',
+        '06': 'VNPAY đã gửi yêu cầu hoàn tiền sang Ngân hàng (GD hoàn tiền)',
+        '07': '	Giao dịch bị nghi ngờ gian lận',
+        '09': 'GD Hoàn trả bị từ chối',
+    };
+
+    await PaymentHistory.updateOne(
+        { transactionId },
+        {
+            transaction_content: transactionContent,
+            status: 'SUCCESS',
+            status_message: transactionStatus[status] || null,
+        },
+    );
 
     res.status(200).send({
         message: 'Payment Success!',

@@ -27,6 +27,10 @@ const PaymentHistory = Schema(
         transaction_content: {
             type: String,
         },
+        status_message: {
+            type: String,
+            default: 'Giao dịch chưa hoàn tất',
+        },
         status: {
             type: String,
             default: 'PENDING',
@@ -34,6 +38,11 @@ const PaymentHistory = Schema(
         },
         timestamp_expired: {
             type: Number,
+            require: true,
+        },
+        completedAt: {
+            type: Date,
+            default: null,
             require: true,
         },
     },
