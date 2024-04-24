@@ -12,16 +12,19 @@ import chaptersRouter from './routers/chapters';
 import lessonsRouter from './routers/lessons';
 import usersRouter from './routers/users';
 import statusCourseRouter from './routers/statusCourse';
-import notesRouter from './routers/note'
+import notesRouter from './routers/note';
 import quizzsRouter from './routers/quizzs';
 import commentRoute from './routers/comments';
 import finishLessonRoute from './routers/finishLesson';
 import noteRoute from './routers/note';
+import cookieParser from 'cookie-parser';
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
 
 const app = express();
 const port = 8080;
+
+app.use(cookieParser());
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
