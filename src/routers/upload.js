@@ -1,15 +1,15 @@
-import { Router } from "express";
-import multer from "multer";
-import path from "path";
-import sharp from "sharp";
-import { __dirname } from "../server";
+import { Router } from 'express';
+import multer from 'multer';
+import path from 'path';
+import sharp from 'sharp';
+import { __dirname } from '../server';
 
 const router = Router();
 
 const upload = multer({
-  limits: {
-    fileSize: 1 * 1024 * 1024,
-  },
+    limits: {
+        fileSize: 1 * 1024 * 1024,
+    },
 });
 
 router.post("/image", upload.single("image"), async (req, res) => {

@@ -14,6 +14,8 @@ export const getAll = async (req, res) => {
   }
 };
 export const addCourseToSttCourse = async (req, res) => {
+  console.log(req.body);
+
   try {
     const { course_id, user_id } = req.body;
 
