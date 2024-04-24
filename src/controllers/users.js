@@ -1,9 +1,9 @@
-import User from "../models/users";
-import { forgetPasswordSchema, loginSchema, registerSchema } from "../validations/user.validate";
-import CreateJwt, { comparePassword } from "../helper/utils";
-import "dotenv/config"
-import bcrypt from 'bcrypt'
-import jwt from "jsonwebtoken";
+import User from '../models/users';
+import { forgetPasswordSchema, loginSchema, registerSchema } from '../validations/user.validate';
+import CreateJwt, { comparePassword } from '../helper/utils';
+import 'dotenv/config';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 export const getAll = async (req, res) => {
     try {
@@ -42,7 +42,9 @@ export const login = async (req, res) => {
             });
         }
 
+
         const pwStatus = await comparePassword(password, user.password);
+
 
         if (!pwStatus) {
             return res.status(400).json({
@@ -51,7 +53,11 @@ export const login = async (req, res) => {
             });
         }
 
-        const token = CreateJwt({ _id: user._id.toString() });
+
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        res.cookie('token', token, { httpOnly: true });
+
 
         return res.status(200).json({
             message: 'Đăng nhập thành công',
@@ -121,10 +127,12 @@ export const register = async (req, res) => {
     }
 };
 
+
 export const ForgetPassword = async (req, res) => {
     try {
         const error = forgetPasswordSchema(req.body);
         console.log(error);
+
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(req?.body?.password, salt);
 
