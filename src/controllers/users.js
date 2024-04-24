@@ -1,8 +1,9 @@
-import User from '../models/users';
-import { forgetPasswordSchema, loginSchema, registerSchema } from '../validations/user.validate';
-import CreateJwt, { comparePassword } from '../helper/utils';
-import 'dotenv/config';
-import jwt from 'jsonwebtoken';
+import User from "../models/users";
+import { forgetPasswordSchema, loginSchema, registerSchema } from "../validations/user.validate";
+import CreateJwt, { comparePassword } from "../helper/utils";
+import "dotenv/config"
+import bcrypt from 'bcrypt'
+import jwt from "jsonwebtoken";
 
 export const getAll = async (req, res) => {
     try {
