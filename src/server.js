@@ -17,6 +17,8 @@ import quizzsRouter from './routers/quizzs';
 import commentRoute from './routers/comments';
 import finishLessonRoute from './routers/finishLesson';
 import noteRoute from './routers/note';
+import paymentRouter from './routers/paymentHistory';
+
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
 
@@ -44,6 +46,7 @@ app.use('/upload', uploadRouter);
 app.use('/api/finishLesson', finishLessonRoute);
 app.use('/api/comments', commentRoute);
 app.use('/api/notes', noteRoute);
+app.use('/api/payment', paymentRouter);
 
 app.use((req, res, next) => {
     next(createError.NotFound('This route does not exist.'));

@@ -36,4 +36,4 @@ export const getQuizzsByLessonId = async (req, res) => {
             message: error,
         });
     }
-}
+};
