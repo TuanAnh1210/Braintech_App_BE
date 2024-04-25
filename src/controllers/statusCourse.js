@@ -10,7 +10,7 @@ export const getAllOrByTime = async (req, res) => {
             ? [
                   {
                       $match: {
-                          createdAt: { $gte: start, $lt: end },
+                          createdAt: { $gte: new Date(start), $lt: new Date(end) },
                       },
                   },
               ]
