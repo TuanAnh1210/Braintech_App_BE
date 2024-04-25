@@ -1,8 +1,39 @@
 import statusCourse from "../models/statusCourse";
-
+import courses from "../models/courses";
 export const getAll = async (req, res) => {
   try {
-    const data = await statusCourse.find();
+    const data = await statusCourse.aggregate([
+      {
+        $group: {
+          _id: "$course_id",
+          subscribers: { $sum: 1 },
+        },
+      },
+      {
+        $lookup: {
+          from: courses.collection.name,
+          localField: "_id",
+          foreignField: "_id",
+          as: "course_info",
+        },
+      },
+      {
+        $unwind: {
+          path: "$course_info",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $project: {
+          subscribers: 1,
+          "course_info.price": 1,
+          "course_info.name": 1,
+          "course_info.isPublic": 1,
+          "course_info.chapters": 1,
+          revenue: { $multiply: ["$course_info.price", "$subscribers"] },
+        },
+      },
+    ]);
     res.send({
       message: "Get data successfully",
       data,
@@ -13,6 +44,7 @@ export const getAll = async (req, res) => {
     });
   }
 };
+
 export const addCourseToSttCourse = async (req, res) => {
   console.log(req.body);
 
