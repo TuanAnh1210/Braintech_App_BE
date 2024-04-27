@@ -85,7 +85,6 @@ export const register = async (req, res) => {
     }
 
     const userExist = await User.findOne({ [body.auth_type]: body.account });
-
     if (userExist) {
       return res.status(400).json({
         error: 1,
@@ -94,7 +93,6 @@ export const register = async (req, res) => {
     }
 
     const { account, auth_type, full_name, password } = body;
-
     const user = await User.create({
       full_name: full_name,
       [auth_type]: account,
@@ -102,7 +100,6 @@ export const register = async (req, res) => {
     });
 
     const token = CreateJwt({ _id: user._id.toString() });
-
     return res.status(200).json({
       error: 0,
       user: {
@@ -113,6 +110,9 @@ export const register = async (req, res) => {
       },
       message: "Đăng ký thành công",
     });
+
+
+
   } catch (error) {
     console.log("error: register", error);
     res.status(500).json({

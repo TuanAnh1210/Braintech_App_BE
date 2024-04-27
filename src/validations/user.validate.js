@@ -59,6 +59,7 @@ export const registerSchema = (data) => {
           "string.pattern.base": "Số điện thoại không hợp lệ",
         }),
     }),
+
     full_name: Joi.string().required().messages({
       "string.empty": "Vui lòng nhập họ và tên",
       "any.required": "Họ và tên là trường bắt buộc",
