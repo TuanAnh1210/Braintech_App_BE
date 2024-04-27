@@ -54,7 +54,7 @@ export const login = async (req, res) => {
         }
 
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         res.cookie('token', token, { httpOnly: true });
 
@@ -195,31 +195,30 @@ export const deleteUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     try {
-        const token = req.headers.authorization.replace('Bearer ', '');
-        if (!token) return res.status(500).json({ message: 'Token not provide!' });
-        const {
-            data: { _id },
-        } = jwt.verify(token, process.env.JWT_SECRET);
-        const findUser = await User.findById(_id);
-        const data = req.body;
+        const token = req.headers.authorization.replace("Bearer ", "");
+        if (!token) return res.status(500).json({ message: "Token not provide!" })
+        const { _id } = jwt.verify(token, process.env.JWT_SECRET);
+        const findUser = await User.findById(_id)
+        const data = req.body
         if (findUser) {
             const result = await User.findOneAndUpdate({ _id: _id }, data, { new: true });
             return res.status(200).json({
                 error: 0,
                 result: result,
-                message: 'Sửa thành công',
+                message: "Sửa thành công",
             });
-        } else {
+        }
+        else {
             res.status(404).json({
                 error: 1,
-                message: 'Không tìm thấy người dùng',
+                message: "Không tìm thấy người dùng",
             });
         }
     } catch (error) {
-        console.log('Error: update user', error);
+        console.log("Error: update user", error);
         res.status(500).json({
             error: 1,
             message: error,
         });
     }
-};
+}
