@@ -8,6 +8,149 @@ import Courses from '../models/courses';
 import 'dotenv/config';
 import { nextTimestamp, sortObject } from '../helper/utils';
 
+export const getAllPayment = async (req, res) => {
+    try {
+        const pipeline = [
+            {
+                $lookup: {
+                    from: 'courses',
+                    localField: 'course_id',
+                    foreignField: '_id',
+                    as: 'course_info',
+                },
+            },
+            {
+                $unwind: {
+                    path: '$course_info',
+                    preserveNullAndEmptyArrays: true,
+                },
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'user_id',
+                    foreignField: '_id',
+                    as: 'user_info',
+                },
+            },
+            {
+                $unwind: {
+                    path: '$user_info',
+                    preserveNullAndEmptyArrays: true,
+                },
+            },
+            {
+                $project: {
+                    _id: 0,
+                    transaction_id: 1,
+                    amount: 1,
+                    status: 1,
+                    cate_id: '$course_info.cate_id',
+                    name: '$course_info.name',
+                    username: '$user_info.full_name',
+                },
+            },
+        ];
+        const data = await PaymentHistory.aggregate(pipeline);
+
+        res.send({
+            message: 'Get data successfully',
+            data,
+        });
+    } catch (error) {
+        res.status(500).send({
+            message: error.message,
+        });
+    }
+};
+
+export const getPaymentByID = async (req, res) => {
+    const transactionId = req.params.transactionId;
+
+    const pipeline = [
+        {
+            $match: { transaction_id: transactionId },
+        },
+        {
+            $lookup: {
+                from: 'courses',
+                localField: 'course_id',
+                foreignField: '_id',
+                as: 'course_info',
+            },
+        },
+        {
+            $unwind: {
+                path: '$course_info',
+                preserveNullAndEmptyArrays: true,
+            },
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'user_id',
+                foreignField: '_id',
+                as: 'user_info',
+            },
+        },
+        {
+            $unwind: {
+                path: '$user_info',
+                preserveNullAndEmptyArrays: true,
+            },
+        },
+        {
+            $lookup: {
+                from: 'categories',
+                localField: 'course_info.cate_id',
+                foreignField: '_id',
+                as: 'category_info',
+            },
+        },
+        {
+            $unwind: {
+                path: '$category_info',
+                preserveNullAndEmptyArrays: true,
+            },
+        },
+        {
+            $project: {
+                _id: 0,
+                createdAt: 1,
+
+                transaction_id: 1,
+                transaction_content: 1,
+                payment_url: 1,
+                amount: 1,
+                status: 1,
+                status_message: 1,
+
+                course_info: '$course_info',
+                category_info: '$category_info',
+                user_info: '$user_info',
+            },
+        },
+        { $limit: 1 },
+    ];
+
+    try {
+        const data = await PaymentHistory.aggregate(pipeline);
+        if (!data) {
+            res.status(404).send({
+                message: 'Payment not found',
+            });
+        }
+        res.send({
+            message: 'Get data successfully',
+            data: data[0],
+        });
+    } catch (error) {
+        res.status(500).send({
+            message: error.message,
+        });
+    }
+};
+
 export const createPaymentUrl = async (req, res) => {
     try {
         const userId = req.userId;

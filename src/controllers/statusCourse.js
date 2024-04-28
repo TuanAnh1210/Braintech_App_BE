@@ -2,20 +2,22 @@ import statusCourse from '../models/statusCourse';
 import courses from '../models/courses';
 
 export const getAllOrByTime = async (req, res) => {
-    const start = req.body.fromDate;
-    const end = req.body.toDate;
+    const start = req.query?.fromDate;
+    const end = req.query?.toDate;
 
     const pipeline = [
-        ...(start && end
+        ...(start
             ? [
                   {
                       $match: {
-                          createdAt: { $gte: new Date(start), $lt: new Date(end) },
+                          createdAt: {
+                              $gte: new Date(+start),
+                              $lte: end ? new Date(+end) : new Date(),
+                          },
                       },
                   },
               ]
             : []),
-
         {
             $group: {
                 _id: '$course_id',
@@ -36,14 +38,15 @@ export const getAllOrByTime = async (req, res) => {
                 preserveNullAndEmptyArrays: true,
             },
         },
+
         {
             $project: {
                 subscribers: 1,
-                updatedAt: 1,
-                'course_info.price': 1,
-                'course_info.name': 1,
-                'course_info.isPublic': 1,
-                'course_info.chapters': 1,
+                price: '$course_info.price',
+                cate_id: '$course_info.cate_id',
+                name: '$course_info.name',
+                isPublic: '$course_info.isPublic',
+                chapters: '$course_info.chapters',
                 revenue: { $multiply: ['$course_info.price', '$subscribers'] },
             },
         },
