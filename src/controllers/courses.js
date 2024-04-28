@@ -57,6 +57,27 @@ export const getAll = async (req, res) => {
         });
     }
 };
+export const getAllClient = async (req, res) => {
+    try {
+        const courses = await Courses.find({ isPublic: true })
+            .populate([
+                {
+                    path: 'cate_id',
+                    select: ['name', 'code'],
+                },
+            ])
+            .sort({ _id: -1 });
+
+        res.send({
+            message: 'Get all courses successfully',
+            courses,
+        });
+    } catch (error) {
+        res.status(500).send({
+            message: error,
+        });
+    }
+};
 
 export const getCourseById = async (req, res) => {
     try {
