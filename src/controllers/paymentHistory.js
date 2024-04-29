@@ -155,7 +155,8 @@ export const createPaymentUrl = async (req, res) => {
     try {
         const userId = req.userId;
         const { courseId } = req.body;
-
+        console.log(userId, 'userId');
+        console.log(courseId, 'courseId');
         if (!courseId) {
             res.status(404).json({
                 message: 'Please provide a valid courseId.',
