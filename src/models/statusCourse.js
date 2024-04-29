@@ -1,16 +1,16 @@
-import { Schema, Types, model } from "mongoose";
+import { Schema, model } from "mongoose";
 
 const statusCourse = new Schema(
   {
     course_id: {
-      type: Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "courses",
-      require: true,
+      required: true,
     },
     user_id: {
-      type: Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "users",
-      require: true,
+      required: true,
     },
   },
   {

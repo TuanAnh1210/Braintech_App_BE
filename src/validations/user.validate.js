@@ -59,6 +59,7 @@ export const registerSchema = (data) => {
           "string.pattern.base": "Số điện thoại không hợp lệ",
         }),
     }),
+
     full_name: Joi.string().required().messages({
       "string.empty": "Vui lòng nhập họ và tên",
       "any.required": "Họ và tên là trường bắt buộc",
@@ -90,6 +91,7 @@ export const forgetPasswordSchema = (data) => {
     email: Joi.string(),
     avatar: Joi.string(),
     phone: Joi.string(),
+    isAdmin: false,
     createdAt: Joi.string(),
     updatedAt: Joi.string(),
     password: Joi.string().min(6).max(50).required().messages({

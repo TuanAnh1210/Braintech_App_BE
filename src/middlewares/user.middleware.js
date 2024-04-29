@@ -10,8 +10,10 @@ const VerifyToken = async (req, res, next) => {
 
     if (authorization && authorization.split(' ')[1]) {
         const accessToken = authorization.split(' ')[1];
-
+        console.log(accessToken, 'accessToken');
         jwt.verify(accessToken, JWT_SECRET, async (err, decoded) => {
+            console.log(err, 'day là err');
+            console.log(decoded, 'day là decoded');
             if (err || !decoded) {
                 return res.status(401).json({
                     error: 1,
@@ -19,8 +21,8 @@ const VerifyToken = async (req, res, next) => {
                 });
             }
 
-            const { _id } = decoded.data;
-
+            const { _id } = decoded;
+            console.log(_id, '_id');
             const user = await User.findOne({ _id }).select(['_id']);
 
             if (!user) {
