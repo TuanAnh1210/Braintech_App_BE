@@ -88,7 +88,7 @@ export const getCourseById = async (req, res) => {
             select: ['name', 'isPublic', 'isFree', 'lessons'],
             populate: {
                 path: 'lessons',
-                select: ['name', 'path_video'], // Chọn trường 'title' từ collection Lesson
+                select: ['name', 'url_video'], // Chọn trường 'title' từ collection Lesson
             },
         });
 
