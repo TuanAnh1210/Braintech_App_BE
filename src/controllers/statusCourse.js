@@ -66,11 +66,8 @@ export const getAllOrByTime = async (req, res) => {
 };
 
 export const addCourseToSttCourse = async (req, res) => {
-    console.log(req.body);
-
     try {
         const { course_id, user_id } = req.body;
-
         const exist = await statusCourse.findOne({ course_id: course_id });
         if (!exist) {
             const data = new statusCourse({
@@ -89,6 +86,25 @@ export const addCourseToSttCourse = async (req, res) => {
                 message: 'Khóa học đã được hoàn thành',
             });
         }
+    } catch (error) {
+        res.status(500).send({
+            message: error.message,
+        });
+    }
+};
+export const countUserByCourse = async (req, res) => {
+    try {
+        const courseId = req.params.id;
+        const counts = await statusCourse.aggregate([
+            { $match: { course_id: courseId } },
+            { $group: { _id: '$course_id', count: { $sum: 1 } } },
+        ]);
+        console.log(counts);
+        const count = counts.length > 0 ? counts[0].count : 0;
+        res.send({
+            message: 'Get count successfully',
+            count,
+        });
     } catch (error) {
         res.status(500).send({
             message: error.message,
