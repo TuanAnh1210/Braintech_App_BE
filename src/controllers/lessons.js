@@ -83,8 +83,8 @@ export const getLessonById = async (req, res) => {
 };
 export const getNextLesson = async (req, res) => {
     try {
-        const { curId } = req.body;
-        const nextLesson = await Lessons.find({ _id: { $lt: curId } })
+        const { id } = req.params;
+        const nextLesson = await Lessons.find({ _id: { $lt: id } })
             .sort({ _id: -1 })
             .limit(1);
         if (nextLesson.length > 0) {

@@ -7,6 +7,7 @@ const coursesRouter = express.Router();
 
 coursesRouter.get('/', controllerCourses.get);
 coursesRouter.get('/all', controllerCourses.getAll);
+coursesRouter.get('/all/client', controllerCourses.getAllClient);
 coursesRouter.get('/:_id', controllerCourses.getCourseById);
 
 coursesRouter.post('/create', controllerCourses.createCourse);

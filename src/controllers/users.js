@@ -53,11 +53,9 @@ export const login = async (req, res) => {
             });
         }
 
-
         const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         res.cookie('token', token, { httpOnly: true });
-
 
         return res.status(200).json({
             message: 'Đăng nhập thành công',
@@ -127,7 +125,6 @@ export const register = async (req, res) => {
     }
 };
 
-
 export const ForgetPassword = async (req, res) => {
     try {
         const error = forgetPasswordSchema(req.body);
@@ -195,30 +192,29 @@ export const deleteUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     try {
-        const token = req.headers.authorization.replace("Bearer ", "");
-        if (!token) return res.status(500).json({ message: "Token not provide!" })
-        const { _id } = jwt.verify(token, process.env.JWT_SECRET);
-        const findUser = await User.findById(_id)
-        const data = req.body
+        const { accessToken } = req.body;
+        if (!accessToken) return res.status(500).json({ message: 'Token not provide!' });
+        const { _id } = jwt.verify(accessToken, process.env.JWT_SECRET);
+        const findUser = await User.findById(_id);
+        const data = req.body;
         if (findUser) {
             const result = await User.findOneAndUpdate({ _id: _id }, data, { new: true });
             return res.status(200).json({
                 error: 0,
                 result: result,
-                message: "Sửa thành công",
+                message: 'Sửa thành công',
             });
-        }
-        else {
+        } else {
             res.status(404).json({
                 error: 1,
-                message: "Không tìm thấy người dùng",
+                message: 'Không tìm thấy người dùng',
             });
         }
     } catch (error) {
-        console.log("Error: update user", error);
+        console.log('Error: update user', error);
         res.status(500).json({
             error: 1,
             message: error,
         });
     }
-}
+};
