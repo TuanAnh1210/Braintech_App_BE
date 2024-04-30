@@ -1,13 +1,13 @@
 import { Router } from "express";
 
-import { login, register, getAll, deleteUser, updateUser } from "../controllers/users";
-import { checkAdmin } from "../middlewares/adminMiddleware";
+import { login, register, getAll, deleteUser, ForgetPassword, updateUser } from "../controllers/users";
 
 const usersRouter = Router();
 
 usersRouter.get("/", getAll);
 usersRouter.post("/login", login);
 usersRouter.post("/register", register);
-usersRouter.patch("/update", updateUser);
-usersRouter.delete("/delete/:id", checkAdmin, deleteUser)
-export default usersRouter; 
+usersRouter.put("/forgetPassword/:id", ForgetPassword);
+usersRouter.delete("/delete/:id", deleteUser)
+usersRouter.patch("/update", updateUser)
+export default usersRouter;

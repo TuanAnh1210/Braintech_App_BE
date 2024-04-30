@@ -1,8 +1,8 @@
 import express from "express";
-import { get } from "../controllers/categories";
+import { getAll } from "../controllers/categories";
 
 const cateRouter = express.Router();
 
-cateRouter.get("/", get);
+cateRouter.get("/", getAll);
 
 export default cateRouter;
