@@ -84,8 +84,9 @@ export const addCourseToSttCourse = async (req, res) => {
                 message: 'Bắt đầu học',
             });
         } else {
-            res.status(400).send({
-                message: 'Khóa học đã tồn tại trong danh sách',
+            await statusCourse.findByIdAndUpdate(exist._id, { isFinish: true }, { new: true });
+            res.status(200).send({
+                message: 'Khóa học đã được hoàn thành',
             });
         }
     } catch (error) {
