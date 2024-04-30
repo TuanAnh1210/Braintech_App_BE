@@ -4,6 +4,7 @@ import { dirname } from 'path';
 import mongoose from 'mongoose';
 import express from 'express';
 import cors from 'cors';
+import 'dotenv/config';
 
 import uploadRouter from './routers/upload';
 import coursesRouter from './routers/courses';
@@ -65,7 +66,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-mongoose.connect('mongodb://127.0.0.1:27017/braintech').then(() => console.log('Connected to DB'));
+mongoose.connect(process.env.DB_URL).then(() => console.log('Connected to DB'));
 
 app.listen(port, () => {
     console.log('Server is running on ' + port);

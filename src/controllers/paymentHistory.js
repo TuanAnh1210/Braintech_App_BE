@@ -354,11 +354,16 @@ export const callbackPayment = async (req, res) => {
             '09': 'GD Hoàn trả bị từ chối',
         };
 
+        const statusPayment = {
+            '01': 'SUCCESS',
+            '02': 'CANCEL',
+        };
+
         await PaymentHistory.updateOne(
             { transaction_id: transactionId },
             {
                 transaction_content: transactionContent,
-                status: 'SUCCESS',
+                status: status === '02' ? 'CANCEL' : 'SUCCESS',
                 status_message: transactionStatus[status] || null,
             },
         );

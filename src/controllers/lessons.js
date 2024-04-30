@@ -59,8 +59,22 @@ export const updateLessonById = async (req, res) => {
         });
     }
 };
-export const getOne = async (req, res) => {
+export const getLessonById = async (req, res) => {
+    const id = req.params.id;
+
     try {
+        const result = await Lessons.findById(id);
+
+        if (result) {
+            return res.status(200).send({
+                message: 'Get Lesson Success!',
+                data: result,
+            });
+        }
+
+        res.status(404).send({
+            message: 'Lesson not found',
+        });
     } catch (error) {
         res.status(500).send({
             message: error,
