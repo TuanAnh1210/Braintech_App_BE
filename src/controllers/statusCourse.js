@@ -64,7 +64,38 @@ export const getAllOrByTime = async (req, res) => {
         });
     }
 };
+export const getAllCourseFinish = async (req, res) => {
+    try {
+        const { user_id } = req.params;
+        const data = await statusCourse.find({
+            isFinish: true,
+            user_id: user_id,
+        });
+        res.send({
+            message: 'Get data successfully',
+            data,
+        });
+    } catch (error) {
+        res.status(500).send({
+            message: error,
+        });
+    }
+};
 
+export const getAllCourseJoin = async (req, res) => {
+    try {
+        const { user_id } = req.params;
+        const data = await statusCourse.find({ user_id: user_id, isFinish: false });
+        res.send({
+            message: 'Get data successfully',
+            data,
+        });
+    } catch (error) {
+        res.status(500).send({
+            message: error,
+        });
+    }
+};
 export const addCourseToSttCourse = async (req, res) => {
     try {
         const { course_id, user_id } = req.body;

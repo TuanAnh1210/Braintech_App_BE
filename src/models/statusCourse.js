@@ -13,7 +13,7 @@ const statusCourse = new Schema(
             required: true,
         },
         isFinish: {
-            type: Schema.Types.Boolean,
+            type: Boolean,
             default: false,
             required: true,
         },
