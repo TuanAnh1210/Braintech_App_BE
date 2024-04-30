@@ -64,7 +64,7 @@ export const getLessonById = async (req, res) => {
 
     try {
         const result = await Lessons.findById(id);
-        console.log(result);
+
         if (result) {
             return res.status(200).send({
                 message: 'Get Lesson Success!',
