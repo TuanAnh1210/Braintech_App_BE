@@ -12,8 +12,6 @@ const VerifyToken = async (req, res, next) => {
         const accessToken = authorization.split(' ')[1];
         console.log(accessToken, 'accessToken');
         jwt.verify(accessToken, JWT_SECRET, async (err, decoded) => {
-            console.log(err, 'day là err');
-            console.log(decoded, 'day là decoded');
             if (err || !decoded) {
                 return res.status(401).json({
                     error: 1,
