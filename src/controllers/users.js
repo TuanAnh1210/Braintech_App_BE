@@ -42,9 +42,7 @@ export const login = async (req, res) => {
             });
         }
 
-
         const pwStatus = await comparePassword(password, user.password);
-
 
         if (!pwStatus) {
             return res.status(400).json({
@@ -64,6 +62,7 @@ export const login = async (req, res) => {
                 email: user.email || null,
                 phone: user.phone,
                 avatar: user.avatar,
+                isAdmin: user.isAdmin,
                 accessToken: token,
             },
         });
