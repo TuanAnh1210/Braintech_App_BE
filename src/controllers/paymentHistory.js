@@ -367,6 +367,7 @@ export const callbackPayment = async (req, res) => {
             },
         );
 
+        //! Đừng hardcode url, lỗi đấy
         res.redirect('http://localhost:3000/detail/' + transaction.course_id);
     } catch (error) {
         console.log('error: Callback_VNPAY', error);
