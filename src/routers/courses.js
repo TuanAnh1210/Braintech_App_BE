@@ -3,12 +3,15 @@ import express from 'express';
 import { upload, uploadVideo } from '../middlewares/multer.middleware';
 import * as controllerCourses from '../controllers/courses';
 
+import VerifyToken from '../middlewares/user.middleware';
+
 const coursesRouter = express.Router();
 
 coursesRouter.get('/', controllerCourses.get);
 coursesRouter.get('/all', controllerCourses.getAll);
 coursesRouter.get('/all/client', controllerCourses.getAllClient);
-coursesRouter.get('/:_id', controllerCourses.getCourseById);
+coursesRouter.get('/:courseId/learning', VerifyToken, controllerCourses.getCourseLearning);
+coursesRouter.get('/:courseId', controllerCourses.getCourseById);
 
 coursesRouter.post('/create', controllerCourses.createCourse);
 coursesRouter.put('/:_id/update', controllerCourses.updateCourse);

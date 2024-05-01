@@ -43,19 +43,23 @@ export const getFinishLessonByCourseId = async (req, res) => {
 
 export const addLessonToFinishLesson = async (req, res) => {
     try {
-        const { lesson_id, user_id, course_id } = req.body;
+        const userId = req.userId;
+        const { lesson_id, course_id } = req.body;
+
         const exist = await finishLesson.findOne({
             lesson_id: lesson_id,
-            user_id: user_id,
+            user_id: userId,
             course_id: course_id,
         });
+
         if (!exist) {
             const data = new finishLesson({
                 lesson_id: lesson_id,
-                user_id: user_id,
+                user_id: userId,
                 course_id: course_id,
             });
             await data.save();
+
             res.status(200).send({
                 message: 'Lesson đã hoàn thành',
             });

@@ -1,5 +1,6 @@
 import cloudinary from '../config/cloudinary.config';
 import Courses from '../models/courses';
+import FinishLesson from '../models/finishLesson';
 
 export const get = async (req, res) => {
     const { _page = 1, _limit = 5, _sort = 'createAt', _order = 'asc' } = req.query;
@@ -81,9 +82,9 @@ export const getAllClient = async (req, res) => {
 
 export const getCourseById = async (req, res) => {
     try {
-        const _id = req.params._id;
+        const courseId = req.params.courseId;
 
-        const selectedCourse = await Courses.findById(_id).populate({
+        const selectedCourse = await Courses.findById(courseId).populate({
             path: 'chapters',
             select: ['name', 'isPublic', 'isFree', 'lessons'],
             populate: {
@@ -95,6 +96,57 @@ export const getCourseById = async (req, res) => {
         res.send({
             message: 'Get course successfully',
             course: selectedCourse,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            message: error,
+        });
+    }
+};
+
+export const getCourseLearning = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const courseId = req.params.courseId;
+
+        const selectedCourse = await Courses.findById(courseId).populate({
+            path: 'chapters',
+            select: ['name', 'isPublic', 'isFree', 'lessons'],
+            populate: {
+                path: 'lessons',
+                select: ['name', 'url_video'],
+            },
+        });
+
+        const lessonFn = await FinishLesson.find({ course_id: courseId, user_id: userId }).select(['lesson_id']);
+
+        // Duyệt qua từng chapter và từng lesson để thêm trạng thái hoàn thành
+        selectedCourse.chapters = selectedCourse.chapters.map((chapter) => {
+            chapter.lessons = chapter.lessons.map((lesson) => {
+                const isCompleted = lessonFn.some((l) => l.lesson_id.equals(lesson._id));
+                return {
+                    ...lesson,
+                    _doc: { ...lesson._doc, isCompleted: isCompleted },
+                };
+            });
+            return chapter;
+        });
+
+        // let nextLessonId = null;
+        // let currentLessonId = null;
+
+        // selectedCourse.chapters.forEach((chapter) => {
+        //     const nextLessons = chapter.lessons.filter((lesson) => lesson._doc.isCompleted === false);
+        //     if (nextLessons?.[0]) currentLessonId = nextLessons?.[0]._doc._id;
+        //     if (nextLessons?.[1]) nextLessonId = nextLessons?.[1]._doc._id;
+        // });
+
+        res.send({
+            message: 'Get course successfully',
+            data: selectedCourse,
+            // nextLessonId: nextLessonId,
+            // currentLessonId: currentLessonId,
         });
     } catch (error) {
         console.log(error);

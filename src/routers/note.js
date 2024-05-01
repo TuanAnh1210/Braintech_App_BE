@@ -1,11 +1,14 @@
-import { Router } from "express";
-import { createNote, getAllByClient, deleteNote, updateNote } from "../controllers/note";
+import { Router } from 'express';
+import { createNote, getAllBylessonId, deleteNote, updateNote } from '../controllers/note';
+
+import VerifyToken from '../middlewares/user.middleware';
 
 const notesRoute = new Router();
 
-notesRoute.get("/:user_id", getAllByClient);
-notesRoute.put("/update/:note_id", updateNote);
-notesRoute.delete("/delete/:note_id", deleteNote);
-notesRoute.post("/", createNote);
+notesRoute.get('/:lessonId', VerifyToken, getAllBylessonId);
+
+notesRoute.post('/', VerifyToken, createNote);
+notesRoute.put('/update/:note_id', VerifyToken, updateNote);
+notesRoute.delete('/delete/:note_id', VerifyToken, deleteNote);
 
 export default notesRoute;

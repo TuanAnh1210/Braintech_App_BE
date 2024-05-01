@@ -1,17 +1,18 @@
 import Comment from '../models/comment';
-import User from '../models/users';
 import Lessons from '../models/lessons';
+import User from '../models/users';
+
 export const getAllComments = async (req, res) => {
     try {
         const commentDatas = await Comment.find();
-        let comments = []
+        let comments = [];
         for (let item of commentDatas) {
-            const { full_name } = await User.findById(item.user_id)
-            const { name } = await Lessons.findById(item.lesson_id)
-            comments.push({ _id: item._id, text: item._doc.text, user: full_name, lessonName: name })
+            const { full_name } = await User.findById(item.user_id);
+            const { name } = await Lessons.findById(item.lesson_id);
+            comments.push({ _id: item._id, text: item._doc.text, user: full_name, lessonName: name });
         }
         res.status(200).send({
-            message: "Lấy thành công toàn bộ bình luận",
+            message: 'Lấy thành công toàn bộ bình luận',
             data: comments,
         });
     } catch (e) {
@@ -20,6 +21,7 @@ export const getAllComments = async (req, res) => {
         });
     }
 };
+
 export const getAllCommentsByLesson = async (req, res) => {
     try {
         const lesson_id = req.params.id;
@@ -34,6 +36,7 @@ export const getAllCommentsByLesson = async (req, res) => {
         });
     }
 };
+
 export const getCommentById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -50,17 +53,20 @@ export const getCommentById = async (req, res) => {
         });
     }
 };
+
 export const postComment = async (req, res) => {
     try {
-        const { content } = req.body;
-        const { lesson_id } = req.body;
-        const { user_id } = req.body;
+        const userId = req.userId;
+        const { content, lesson_id } = req.body;
+
         const newComment = new Comment({
             lesson_id: lesson_id,
-            user_id: user_id,
+            user_id: userId,
             text: content,
         });
+
         await newComment.save();
+
         res.status(200).send({
             message: 'Thêm bình luận thành công',
             data: newComment,
@@ -71,6 +77,7 @@ export const postComment = async (req, res) => {
         });
     }
 };
+
 export const deleteComment = async (req, res) => {
     try {
         const findCmt = await Comment.findById(req.params.id);
@@ -96,16 +103,23 @@ export const deleteComment = async (req, res) => {
         });
     }
 };
+
 export const editComment = async (req, res) => {
     try {
-        const findCmt = await Comment.findById(req.params.id);
+        const userId = req.userId;
+        const id = req.params.id;
+
         const { content } = req.body;
-        const newData = {
-            text: content
-        }
+
+        const findCmt = await Comment.findOne({ _id: id, user_id: userId });
+
         if (findCmt) {
-            const result = await Object.assign(findCmt, newData)
-            await result.save()
+            const result = await Object.assign(findCmt, {
+                text: content,
+            });
+
+            await result.save();
+
             return res.status(200).json({
                 error: 0,
                 data: findCmt,
