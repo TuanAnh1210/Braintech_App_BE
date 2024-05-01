@@ -6,7 +6,10 @@ export const getAllBylessonId = async (req, res) => {
         const userId = req.userId;
         const lessonId = req.params.lessonId;
 
-        const notes = await Notes.find({ user_id: userId, lesson_id: lessonId });
+        const notes = await Notes.find({ user_id: userId, lesson_id: lessonId }).populate({
+            path: 'lesson_id',
+            select: ['name'],
+        });
 
         res.status(200).send({
             message: 'Lấy thành công dữ liệu',
