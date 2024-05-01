@@ -1,19 +1,14 @@
 import { Router } from 'express';
-import {
-    deleteComment,
-    editComment,
-    getAllComments,
-    getAllCommentsByLesson,
-    getCommentById,
-    postComment,
-} from '../controllers/comments';
+import * as controllerCmt from '../controllers/comments';
+import VerifyToken from '../middlewares/user.middleware';
 
 const commentRoute = new Router();
 
-commentRoute.get('/', getAllComments);
-commentRoute.get('/lesson/:id', getAllCommentsByLesson);
-commentRoute.get('/:id', getCommentById);
-commentRoute.post('/', postComment);
-commentRoute.delete('/delete/:id', deleteComment);
-commentRoute.patch('/:id', editComment);
+commentRoute.get('/', controllerCmt.getAllComments);
+commentRoute.get('/lesson/:id', controllerCmt.getAllCommentsByLesson);
+commentRoute.get('/:id', controllerCmt.getCommentById);
+commentRoute.post('/', VerifyToken, controllerCmt.postComment);
+commentRoute.delete('/delete/:id', controllerCmt.deleteComment);
+commentRoute.patch('/:id', VerifyToken, controllerCmt.editComment);
+
 export default commentRoute;

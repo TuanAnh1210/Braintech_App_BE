@@ -133,17 +133,20 @@ export const getCourseLearning = async (req, res) => {
             return chapter;
         });
 
-        let nextLessonId = null;
+        // let nextLessonId = null;
+        // let currentLessonId = null;
 
-        selectedCourse.chapters.forEach((chapter) => {
-            const nextLesson = chapter.lessons.find((lesson) => lesson._doc.isCompleted === false);
-            if (nextLesson) nextLessonId = nextLesson._doc._id;
-        });
+        // selectedCourse.chapters.forEach((chapter) => {
+        //     const nextLessons = chapter.lessons.filter((lesson) => lesson._doc.isCompleted === false);
+        //     if (nextLessons?.[0]) currentLessonId = nextLessons?.[0]._doc._id;
+        //     if (nextLessons?.[1]) nextLessonId = nextLessons?.[1]._doc._id;
+        // });
 
         res.send({
             message: 'Get course successfully',
             data: selectedCourse,
-            nextLessonId: nextLessonId,
+            // nextLessonId: nextLessonId,
+            // currentLessonId: currentLessonId,
         });
     } catch (error) {
         console.log(error);

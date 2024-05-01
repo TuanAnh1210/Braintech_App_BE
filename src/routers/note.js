@@ -7,8 +7,8 @@ const notesRoute = new Router();
 
 notesRoute.get('/:lessonId', VerifyToken, getAllBylessonId);
 
-notesRoute.post('/', createNote);
-notesRoute.put('/update/:note_id', updateNote);
-notesRoute.delete('/delete/:note_id', deleteNote);
+notesRoute.post('/', VerifyToken, createNote);
+notesRoute.put('/update/:note_id', VerifyToken, updateNote);
+notesRoute.delete('/delete/:note_id', VerifyToken, deleteNote);
 
 export default notesRoute;

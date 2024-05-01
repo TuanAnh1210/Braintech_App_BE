@@ -5,6 +5,7 @@ export const getAllBylessonId = async (req, res) => {
     try {
         const userId = req.userId;
         const lessonId = req.params.lessonId;
+
         const notes = await Notes.find({ user_id: userId, lesson_id: lessonId });
 
         res.status(200).send({
@@ -20,15 +21,15 @@ export const getAllBylessonId = async (req, res) => {
 
 export const createNote = async (req, res) => {
     try {
-        const { content } = req.body;
-        const { lesson_id } = req.body;
-        const { user_id } = req.body;
-        console.log(req.body);
+        const userId = req.userId;
+        const { content, lesson_id } = req.body;
+
         const newNote = new Notes({
             text: content,
             lesson_id: lesson_id,
-            user_id: user_id,
+            user_id: userId,
         });
+
         await newNote.save();
         res.status(200).send({
             message: 'Thêm thành công ghi chú',
@@ -41,18 +42,12 @@ export const createNote = async (req, res) => {
 };
 export const updateNote = async (req, res) => {
     try {
-        // const error = updateNoteSchema(req.body);
-        // console.log(error);
-        // if (error) {
-        //   return res.status(400).json({
-        //     error: 1,
-        //     message: error.message,
-        //   });
-        // }
+        const userId = req.userId;
+        const noteId = req.params.note_id;
+        const { text } = req.body;
 
-        await Notes.findByIdAndUpdate(req.params.note_id, req.body, {
-            new: true,
-        });
+        await Notes.updateOne({ _id: noteId, user_id: userId }, { text: text }, { new: true });
+
         res.status(200).send({
             message: 'Chỉnh sửa thành công ghi chú',
         });
@@ -64,7 +59,13 @@ export const updateNote = async (req, res) => {
 };
 export const deleteNote = async (req, res) => {
     try {
-        const findNote = await Notes.findByIdAndDelete(req.params.note_id);
+        const userId = req.userId;
+        const noteId = req.params.note_id;
+
+        await Notes.deleteOne({
+            user_id: userId,
+            _id: noteId,
+        });
 
         res.status(200).send({
             message: 'Xóa thành công ghi chú',
