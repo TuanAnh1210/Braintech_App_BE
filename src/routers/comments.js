@@ -5,7 +5,7 @@ import VerifyToken from '../middlewares/user.middleware';
 const commentRoute = new Router();
 
 commentRoute.get('/', controllerCmt.getAllComments);
-commentRoute.get('/lesson/:id', controllerCmt.getAllCommentsByLesson);
+commentRoute.get('/lesson/:id', VerifyToken, controllerCmt.getAllCommentsByLesson);
 commentRoute.get('/:id', controllerCmt.getCommentById);
 commentRoute.post('/', VerifyToken, controllerCmt.postComment);
 commentRoute.delete('/delete/:id', controllerCmt.deleteComment);

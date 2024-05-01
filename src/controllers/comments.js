@@ -24,11 +24,26 @@ export const getAllComments = async (req, res) => {
 
 export const getAllCommentsByLesson = async (req, res) => {
     try {
+        const userId = req.userId;
         const lesson_id = req.params.id;
-        const comments = await Comment.find({ lesson_id: lesson_id });
+
+        const comments = await Comment.find({ lesson_id: lesson_id }).populate({
+            path: 'user_id',
+            select: ['full_name'],
+        });
+
+        // Duyệt qua từng chapter và từng lesson để thêm trạng thái hoàn thành
+        const result = comments.map((cmt) => {
+            const isMyComment = cmt.user_id._id.toString() === userId;
+            return {
+                ...cmt,
+                _doc: { ...cmt._doc, isMyComment: isMyComment },
+            };
+        });
+
         res.status(200).send({
             message: 'Lấy thành công toàn bộ bình luận',
-            data: comments,
+            data: result.map((r) => r._doc),
         });
     } catch (e) {
         res.status(500).send({
