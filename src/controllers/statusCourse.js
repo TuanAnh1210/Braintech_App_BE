@@ -64,13 +64,14 @@ export const getAllOrByTime = async (req, res) => {
         });
     }
 };
-export const getAllCourseFinish = async (req, res) => {
+export const getAllSttCourse = async (req, res) => {
     try {
-        const { user_id } = req.params;
-        const data = await statusCourse.find({
-            isFinish: true,
-            user_id: user_id,
-        });
+        const data = await statusCourse.find({}).populate([
+            {
+                path: 'course_id',
+                select: ['name', 'thumb'],
+            },
+        ]);
         res.send({
             message: 'Get data successfully',
             data,
@@ -82,20 +83,6 @@ export const getAllCourseFinish = async (req, res) => {
     }
 };
 
-export const getAllCourseJoin = async (req, res) => {
-    try {
-        const { user_id } = req.params;
-        const data = await statusCourse.find({ user_id: user_id, isFinish: false });
-        res.send({
-            message: 'Get data successfully',
-            data,
-        });
-    } catch (error) {
-        res.status(500).send({
-            message: error,
-        });
-    }
-};
 export const addCourseToSttCourse = async (req, res) => {
     try {
         const { course_id, user_id } = req.body;
@@ -130,7 +117,6 @@ export const countUserByCourse = async (req, res) => {
             { $match: { course_id: courseId } },
             { $group: { _id: '$course_id', count: { $sum: 1 } } },
         ]);
-        console.log(counts);
         const count = counts.length > 0 ? counts[0].count : 0;
         res.send({
             message: 'Get count successfully',
