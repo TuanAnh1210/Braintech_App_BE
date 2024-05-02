@@ -85,12 +85,14 @@ export const getAllSttCourse = async (req, res) => {
 
 export const addCourseToSttCourse = async (req, res) => {
     try {
-        const { course_id, user_id } = req.body;
+        const { course_id } = req.body;
+        const userId = req.userId;
         const exist = await statusCourse.findOne({ course_id: course_id });
+
         if (!exist) {
             const data = new statusCourse({
                 course_id: course_id,
-                user_id: user_id,
+                user_id: userId,
             });
 
             await data.save();
@@ -99,9 +101,8 @@ export const addCourseToSttCourse = async (req, res) => {
                 message: 'Bắt đầu học',
             });
         } else {
-            await statusCourse.findByIdAndUpdate(exist._id, { isFinish: true }, { new: true });
             res.status(200).send({
-                message: 'Khóa học đã được hoàn thành',
+                message: 'Bạn đã thêm khóa học này rồi',
             });
         }
     } catch (error) {
@@ -110,7 +111,23 @@ export const addCourseToSttCourse = async (req, res) => {
         });
     }
 };
+export const updateSttCourse = async (req, res) => {
+    try {
+        const { course_id } = req.body;
+        const userId = req.userId;
 
+        const exist = await statusCourse.findOne({ course_id: course_id, user_id: userId });
+        console.log(exist);
+        await statusCourse.findByIdAndUpdate(exist._id, { isFinish: true }, { new: true });
+        res.status(200).send({
+            message: 'Khóa học đã được hoàn thành',
+        });
+    } catch (err) {
+        res.status(500).send({
+            message: err.message,
+        });
+    }
+};
 export const countUserByCourse = async (req, res) => {
     try {
         const courseId = req.params.id;
