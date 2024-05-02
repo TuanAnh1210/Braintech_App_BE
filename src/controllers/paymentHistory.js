@@ -7,11 +7,12 @@ import Courses from '../models/courses';
 
 import 'dotenv/config';
 import { nextTimestamp, sortObject } from '../helper/utils';
-
+import { _countLessonInChapters } from './finishLesson';
 export const getAllPayment = async (req, res) => {
     const start = req.query?.fromDate;
     const end = req.query?.toDate;
 
+    // Get payment by date (no date => all payment)
     const pipeline = [
         ...(start
             ? [
@@ -88,10 +89,21 @@ export const getAllPayment = async (req, res) => {
 
     try {
         const data = await PaymentHistory.aggregate(pipeline).exec();
-        // const data = await PaymentHistory.find().populate('course_id').populate('user_id');
+        let appendData = null;
+
+        if (data?.length) {
+            appendData = await Promise.all(
+                data.map(async (payment) => {
+                    const totalLessons = await _countLessonInChapters(payment.course_info.chapters);
+
+                    return { ...payment, course_info: { ...payment.course_info, totalLessons } };
+                }),
+            );
+        }
+
         res.send({
             message: 'Get payment successfully',
-            data,
+            data: appendData || data,
         });
     } catch (error) {
         res.status(500).send({
@@ -367,7 +379,6 @@ export const callbackPayment = async (req, res) => {
             },
         );
 
-        //! Đừng hardcode url, lỗi đấy
         res.redirect('http://localhost:3000/detail/' + transaction.course_id);
     } catch (error) {
         console.log('error: Callback_VNPAY', error);
@@ -376,4 +387,3 @@ export const callbackPayment = async (req, res) => {
         });
     }
 };
-
