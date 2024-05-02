@@ -1,9 +1,10 @@
 import cloudinary from '../config/cloudinary.config';
 import Courses from '../models/courses';
+import { _countLessonInChapters } from './finishLesson';
 import FinishLesson from '../models/finishLesson';
 
 export const get = async (req, res) => {
-    const { _page = 1, _limit = 5, _sort = 'createAt', _order = 'asc' } = req.query;
+    const { _page = 1, _limit = 5, _sort = 'createdAt', _order = 'asc' } = req.query;
     const options = {
         page: _page,
         limit: _limit,
@@ -39,6 +40,7 @@ export const get = async (req, res) => {
 
 export const getAll = async (req, res) => {
     try {
+        let appendData = null;
         const courses = await Courses.find()
             .populate([
                 {
@@ -48,9 +50,18 @@ export const getAll = async (req, res) => {
             ])
             .sort({ _id: -1 });
 
+        if (courses?.length) {
+            appendData = await Promise.all(
+                courses.map(async (course) => {
+                    const totalLessons = await _countLessonInChapters(course.chapters);
+                    return { ...course._doc, totalLessons };
+                }),
+            );
+        }
+
         res.send({
             message: 'Get all courses successfully',
-            courses,
+            courses: appendData || courses,
         });
     } catch (error) {
         res.status(500).send({

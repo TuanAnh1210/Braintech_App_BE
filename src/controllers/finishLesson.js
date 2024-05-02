@@ -1,4 +1,5 @@
 import finishLesson from '../models/finishLesson';
+import Chapters from '../models/chapters';
 
 export const getAll = async (req, res) => {
     try {
@@ -88,4 +89,28 @@ export const countLessonFinish = async (req, res) => {
             message: err,
         });
     }
+};
+
+//? SERVICES
+export const _countLessonInChapters = async (chapters) => {
+    const pipeline = [
+        {
+            $match: {
+                _id: {
+                    $in: chapters,
+                },
+            },
+        },
+        {
+            $project: {
+                lessons: {
+                    $size: '$lessons',
+                },
+            },
+        },
+    ];
+
+    const lessons = (await Chapters.aggregate(pipeline).exec()) || [];
+
+    return lessons.reduce((a, b) => a + b.lessons, 0);
 };
