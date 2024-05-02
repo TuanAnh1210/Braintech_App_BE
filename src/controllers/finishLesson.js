@@ -24,6 +24,10 @@ export const getFinishLessonByCourseId = async (req, res) => {
         const userId = req.userId;
         const courseId = req.params.courseId;
 
+        const chapters = await Chapters.find({ courses_id: courseId, isPublic: true }).populate({
+            path: 'lessons',
+        });
+
         const data = await finishLesson
             .findOne({
                 user_id: userId,
@@ -34,6 +38,7 @@ export const getFinishLessonByCourseId = async (req, res) => {
         res.send({
             message: 'Get data successfully',
             data,
+            chapters,
         });
     } catch (err) {
         res.status(500).send({
@@ -59,6 +64,7 @@ export const addLessonToFinishLesson = async (req, res) => {
                 user_id: userId,
                 course_id: course_id,
             });
+
             await data.save();
 
             res.status(200).send({
