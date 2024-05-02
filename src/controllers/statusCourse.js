@@ -69,7 +69,7 @@ export const getAllSttCourse = async (req, res) => {
         const data = await statusCourse.find({}).populate([
             {
                 path: 'course_id',
-                select: ['name', 'thumb', ''],
+                select: ['name', 'thumb'],
             },
         ]);
         res.send({
@@ -87,7 +87,6 @@ export const addCourseToSttCourse = async (req, res) => {
     try {
         const { course_id } = req.body;
         const userId = req.userId;
-        console.log(userId, course_id);
         const exist = await statusCourse.findOne({ course_id: course_id });
 
         if (!exist) {
@@ -100,6 +99,10 @@ export const addCourseToSttCourse = async (req, res) => {
 
             res.status(200).send({
                 message: 'Bắt đầu học',
+            });
+        } else {
+            res.status(200).send({
+                message: 'Bạn đã thêm khóa học này rồi',
             });
         }
     } catch (error) {
@@ -114,6 +117,7 @@ export const updateSttCourse = async (req, res) => {
         const userId = req.userId;
 
         const exist = await statusCourse.findOne({ course_id: course_id, user_id: userId });
+        console.log(exist);
         await statusCourse.findByIdAndUpdate(exist._id, { isFinish: true }, { new: true });
         res.status(200).send({
             message: 'Khóa học đã được hoàn thành',

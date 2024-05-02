@@ -7,7 +7,7 @@ const VerifyToken = async (req, res, next) => {
     const JWT_SECRET = process.env.JWT_SECRET;
 
     const authorization = req.headers.authorization;
-
+    console.log(authorization);
     if (authorization && authorization.split(' ')[1]) {
         const accessToken = authorization.split(' ')[1];
         jwt.verify(accessToken, JWT_SECRET, async (err, decoded) => {
@@ -20,7 +20,6 @@ const VerifyToken = async (req, res, next) => {
 
             const { _id } = decoded;
             const user = await User.findOne({ _id }).select(['_id']);
-
             if (!user) {
                 return res.status(401).json({
                     error: 1,
