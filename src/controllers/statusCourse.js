@@ -111,6 +111,7 @@ export const addCourseToSttCourse = async (req, res) => {
         });
     }
 };
+
 export const updateSttCourse = async (req, res) => {
     try {
         const { course_id } = req.body;
@@ -128,17 +129,22 @@ export const updateSttCourse = async (req, res) => {
         });
     }
 };
+
 export const countUserByCourse = async (req, res) => {
     try {
         const courseId = req.params.id;
-        const counts = await statusCourse.aggregate([
-            { $match: { course_id: courseId } },
-            { $group: { _id: '$course_id', count: { $sum: 1 } } },
-        ]);
-        const count = counts.length > 0 ? counts[0].count : 0;
+
+        const counts = await statusCourse.count({ course_id: courseId });
+
+        // const counts = await statusCourse.aggregate([
+        //     { $match: { course_id: courseId } },
+        //     { $group: { _id: '$course_id', count: { $sum: 1 } } },
+        // ]);
+
+        // const count = counts.length > 0 ? counts[0].count : 0;
         res.send({
             message: 'Get count successfully',
-            count,
+            count: counts,
         });
     } catch (error) {
         res.status(500).send({

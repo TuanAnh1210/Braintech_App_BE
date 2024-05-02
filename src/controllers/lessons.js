@@ -63,7 +63,7 @@ export const getLessonById = async (req, res) => {
     const id = req.params.id;
 
     try {
-        const result = await Lessons.findById(id);
+        const result = await Lessons.findOne({ _id: id, isPublic: true });
 
         if (result) {
             return res.status(200).send({
@@ -74,6 +74,7 @@ export const getLessonById = async (req, res) => {
 
         res.status(404).send({
             message: 'Lesson not found',
+            data: null,
         });
     } catch (error) {
         res.status(500).send({
