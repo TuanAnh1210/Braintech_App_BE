@@ -78,8 +78,9 @@ export const addLessonToFinishLesson = async (req, res) => {
 
 export const countLessonFinish = async (req, res) => {
     try {
+        const userId = req.userId;
         const course_id = req.params.course_id;
-        const count = await finishLesson.count({ course_id: course_id });
+        const count = await finishLesson.count({ course_id: course_id, user_id: userId });
         res.send({
             message: 'Counted successfully',
             count,

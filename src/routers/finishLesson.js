@@ -12,5 +12,5 @@ const finishLessonRoute = Router();
 finishLessonRoute.get('/', VerifyToken, getAll);
 finishLessonRoute.get('/:courseId', VerifyToken, getFinishLessonByCourseId);
 finishLessonRoute.post('/add', VerifyToken, addLessonToFinishLesson);
-finishLessonRoute.get('/count/:course_id', countLessonFinish);
+finishLessonRoute.get('/count/:course_id', VerifyToken, countLessonFinish);
 export default finishLessonRoute;
