@@ -95,9 +95,10 @@ export const postComment = async (req, res) => {
 
 export const deleteComment = async (req, res) => {
     try {
+        const userId = req.userId;
         const findCmt = await Comment.findById(req.params.id);
         if (findCmt) {
-            const result = await Comment.deleteOne({ _id: req.params.id });
+            const result = await Comment.deleteOne({ _id: req.params.id, user_id: userId });
             return res.status(200).json({
                 error: 0,
                 data: findCmt,
