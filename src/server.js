@@ -22,6 +22,7 @@ import noteRoute from './routers/note';
 import cookieParser from 'cookie-parser';
 
 import paymentRouter from './routers/paymentHistory';
+import paymentDetailRoute from './routers/payment';
 
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
@@ -40,6 +41,7 @@ app.use(express.static('src/public'));
 
 // Router
 app.use('/api/courses', coursesRouter);
+app.use('/api/paymentDetail', paymentDetailRoute);
 app.use('/api/notes', notesRouter);
 app.use('/api/lessons', lessonsRouter);
 app.use('/api/sttCourse', statusCourseRouter);
