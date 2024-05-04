@@ -94,16 +94,21 @@ export const getAllPayment = async (req, res) => {
         if (data?.length) {
             appendData = await Promise.all(
                 data.map(async (payment) => {
-                    const totalLessons = await _countLessonInChapters(payment.course_info.chapters);
+                    if (payment.course_info) {
+                        const totalLessons = await _countLessonInChapters(payment.course_info?.chapters);
 
-                    return { ...payment, course_info: { ...payment.course_info, totalLessons } };
+                        return { ...payment, course_info: { ...payment.course_info, totalLessons } };
+                    }
                 }),
             );
         }
 
+        const datas = appendData.flat();
+
         res.send({
             message: 'Get payment successfully',
-            data: appendData || data,
+            // data: appendData || data,
+            data: datas,
         });
     } catch (error) {
         res.status(500).send({
