@@ -1,5 +1,5 @@
-import statusCourse from '../models/statusCourse';
-import courses from '../models/courses';
+import statusCourse from '../models/statusCourse.js';
+import courses from '../models/courses.js';
 
 export const getAllOrByTime = async (req, res) => {
     const start = req.query?.fromDate;

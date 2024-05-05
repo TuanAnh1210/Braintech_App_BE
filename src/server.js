@@ -6,23 +6,23 @@ import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 
-import uploadRouter from './routers/upload';
-import coursesRouter from './routers/courses';
-import cateRouter from './routers/categories';
-import chaptersRouter from './routers/chapters';
-import lessonsRouter from './routers/lessons';
-import usersRouter from './routers/users';
-import statusCourseRouter from './routers/statusCourse';
-import notesRouter from './routers/note';
-import quizzsRouter from './routers/quizzs';
-import commentRoute from './routers/comments';
-import finishLessonRoute from './routers/finishLesson';
-import noteRoute from './routers/note';
+import uploadRouter from './routers/upload.js';
+import coursesRouter from './routers/courses.js';
+import cateRouter from './routers/categories.js';
+import chaptersRouter from './routers/chapters.js';
+import lessonsRouter from './routers/lessons.js';
+import usersRouter from './routers/users.js';
+import statusCourseRouter from './routers/statusCourse.js';
+import notesRouter from './routers/note.js';
+import quizzsRouter from './routers/quizzs.js';
+import commentRoute from './routers/comments.js';
+import finishLessonRoute from './routers/finishLesson.js';
+import noteRoute from './routers/note.js';
 
 import cookieParser from 'cookie-parser';
 
-import paymentRouter from './routers/paymentHistory';
-import paymentDetailRoute from './routers/payment';
+import paymentRouter from './routers/paymentHistory.js';
+import paymentDetailRoute from './routers/payment.js';
 
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);

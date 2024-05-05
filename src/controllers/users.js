@@ -1,6 +1,6 @@
-import User from '../models/users';
-import { forgetPasswordSchema, loginSchema, registerSchema } from '../validations/user.validate';
-import CreateJwt, { comparePassword } from '../helper/utils';
+import User from '../models/users.js';
+import { forgetPasswordSchema, loginSchema, registerSchema } from '../validations/user.validate.js';
+import CreateJwt, { comparePassword } from '../helper/utils.js';
 import 'dotenv/config';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';

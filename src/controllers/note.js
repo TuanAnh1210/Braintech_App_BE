@@ -1,5 +1,5 @@
-import Notes from '../models/note';
-import { createNoteSchema, updateNoteSchema } from '../validations/note.validate';
+import Notes from '../models/note.js';
+import { createNoteSchema, updateNoteSchema } from '../validations/note.validate.js';
 
 export const getAllBylessonId = async (req, res) => {
     try {

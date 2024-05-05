@@ -1,7 +1,7 @@
-import cloudinary from '../config/cloudinary.config';
-import Courses from '../models/courses';
-import { _countLessonInChapters } from './finishLesson';
-import FinishLesson from '../models/finishLesson';
+import cloudinary from '../config/cloudinary.config.js';
+import Courses from '../models/courses.js';
+import { _countLessonInChapters } from './finishLesson.js';
+import FinishLesson from '../models/finishLesson.js';
 
 export const get = async (req, res) => {
     const { _page = 1, _limit = 5, _sort = 'createdAt', _order = 'asc' } = req.query;

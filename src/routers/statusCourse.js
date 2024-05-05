@@ -5,8 +5,8 @@ import {
     getAllOrByTime,
     getAllSttCourse,
     updateSttCourse,
-} from '../controllers/statusCourse';
-import VerifyToken from '../middlewares/user.middleware';
+} from '../controllers/statusCourse.js';
+import VerifyToken from '../middlewares/user.middleware.js';
 
 const statusCourseRouter = Router();
 

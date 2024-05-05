@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { createNote, getAllBylessonId, deleteNote, updateNote } from '../controllers/note';
+import { createNote, getAllBylessonId, deleteNote, updateNote } from '../controllers/note.js';
 
-import VerifyToken from '../middlewares/user.middleware';
+import VerifyToken from '../middlewares/user.middleware.js';
 
 const notesRoute = new Router();
 

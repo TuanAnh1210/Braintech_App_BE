@@ -1,9 +1,9 @@
 import express from 'express';
 
-import { upload, uploadVideo } from '../middlewares/multer.middleware';
-import * as controllerCourses from '../controllers/courses';
+import { upload, uploadVideo } from '../middlewares/multer.middleware.js';
+import * as controllerCourses from '../controllers/courses.js';
 
-import VerifyToken from '../middlewares/user.middleware';
+import VerifyToken from '../middlewares/user.middleware.js';
 
 const coursesRouter = express.Router();
 
