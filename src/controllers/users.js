@@ -1,6 +1,6 @@
-import User from '../models/users';
-import { forgetPasswordSchema, loginSchema, registerSchema } from '../validations/user.validate';
-import CreateJwt, { comparePassword } from '../helper/utils';
+import User from '../models/users.js';
+import { forgetPasswordSchema, loginSchema, registerSchema } from '../validations/user.validate.js';
+import CreateJwt, { comparePassword } from '../helper/utils.js';
 import 'dotenv/config';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -58,16 +58,17 @@ export const login = async (req, res) => {
         return res.status(200).json({
             message: 'Đăng nhập thành công',
             user: {
+                _id :  user._id,
                 fullName: user.full_name,
                 email: user.email || null,
                 phone: user.phone,
                 avatar: user.avatar,
                 isAdmin: user.isAdmin,
+                isTeacher: user.isTeacher,
                 accessToken: token,
             },
         });
     } catch (error) {
-        console.log('error: login', error);
         res.status(500).json({
             message: error,
         });
@@ -127,7 +128,6 @@ export const register = async (req, res) => {
 export const ForgetPassword = async (req, res) => {
     try {
         const error = forgetPasswordSchema(req.body);
-        console.log(error);
 
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(req?.body?.password, salt);

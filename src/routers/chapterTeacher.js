@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import * as controllerchapters from '../controllers/chapters.js';
+import * as controllerchapters from '../controllers/chaptersTeacher.js';
 
 const chaptersRouter = new Router();
 
