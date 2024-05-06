@@ -25,12 +25,10 @@ const User = new Schema(
         "https://res.cloudinary.com/dpjieqbsk/image/upload/v1681376184/braintech/n5ktpikmscz1ngfe59go.jpg",
     },
     isAdmin: {
-      type: Boolean,
-      default: false
+      type: Boolean
     },
     isTeacher: {
-      type: Boolean,
-      default: false
+      type: Boolean
     },
   },
   { timestamps: true, versionKey: false }

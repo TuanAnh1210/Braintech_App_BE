@@ -20,6 +20,7 @@ const VerifyToken = async (req, res, next) => {
 
             const { _id } = decoded;
             const user = await User.findOne({ _id }).select(['_id']);
+            console.log(user);
 
             if (!user) {
                 return res.status(401).json({

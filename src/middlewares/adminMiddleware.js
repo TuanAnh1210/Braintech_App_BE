@@ -28,7 +28,7 @@ export const checkAdmin = async (req, res, next) => {
         }
         const _id = decoded.data._id;
         const user = await User.findById(_id);
-        if (!user.isAdmin) {
+        if (!user.isAdmin | !user.isTeacher) {
             res.status(401).send({
                 message: 'Không có quyền truy cập tài nguyên',
             });
