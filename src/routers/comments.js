@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import * as controllerCmt from '../controllers/comments';
-import VerifyToken from '../middlewares/user.middleware';
+import * as controllerCmt from '../controllers/comments.js';
+import VerifyToken from '../middlewares/user.middleware.js';
 
 const commentRoute = new Router();
 

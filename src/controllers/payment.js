@@ -1,4 +1,4 @@
-import paymentHistory from '../models/paymentHistory';
+import paymentHistory from '../models/paymentHistory.js';
 
 export const getAll = async (req, res) => {
     try {

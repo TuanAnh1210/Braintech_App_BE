@@ -1,5 +1,5 @@
-import finishLesson from '../models/finishLesson';
-import Chapters from '../models/chapters';
+import finishLesson from '../models/finishLesson.js';
+import Chapters from '../models/chapters.js';
 
 export const getAll = async (req, res) => {
     try {
