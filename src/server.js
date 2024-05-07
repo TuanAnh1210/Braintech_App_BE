@@ -23,8 +23,11 @@ import noteRoute from './routers/note.js';
 
 import cookieParser from 'cookie-parser';
 
-import paymentRouter from './routers/paymentHistory.js';
-import paymentDetailRoute from './routers/payment.js';
+
+import paymentRouter from './routers/paymentHistory';
+import paymentDetailRoute from './routers/payment';
+import rateApiRoute from './routers/rate';
+
 
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
@@ -59,6 +62,7 @@ app.use('/api/finishLesson', finishLessonRoute);
 app.use('/api/comments', commentRoute);
 app.use('/api/notes', noteRoute);
 app.use('/api/payment', paymentRouter);
+app.use('/api/rate', rateApiRoute);
 
 app.use((req, res, next) => {
     next(createError.NotFound('This route does not exist.'));
