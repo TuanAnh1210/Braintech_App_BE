@@ -6,6 +6,9 @@ import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 
+
+import voucherRoute from './routers/voucher';
+
 import uploadRouter from './routers/upload.js';
 import coursesRouter from './routers/courses.js';
 import coursesTeacherRouter from './routers/courses_teacher.js';
@@ -20,6 +23,7 @@ import quizzsRouter from './routers/quizzs.js';
 import commentRoute from './routers/comments.js';
 import finishLessonRoute from './routers/finishLesson.js';
 import noteRoute from './routers/note.js';
+
 
 import cookieParser from 'cookie-parser';
 
@@ -62,7 +66,10 @@ app.use('/api/finishLesson', finishLessonRoute);
 app.use('/api/comments', commentRoute);
 app.use('/api/notes', noteRoute);
 app.use('/api/payment', paymentRouter);
+
+app.use('/api/voucher', voucherRoute);
 app.use('/api/rate', rateApiRoute);
+
 
 app.use((req, res, next) => {
     next(createError.NotFound('This route does not exist.'));
