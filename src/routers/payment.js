@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import VerifyToken from '../middlewares/user.middleware';
-import { getAll, getAllByUserId } from '../controllers/payment';
+import VerifyToken from '../middlewares/user.middleware.js';
+import { getAll, getAllByUserId } from '../controllers/payment.js';
 
 const paymentDetailRoute = new Router();
 

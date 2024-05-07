@@ -1,6 +1,6 @@
-import Comment from '../models/comment';
-import Lessons from '../models/lessons';
-import User from '../models/users';
+import Comment from '../models/comment.js';
+import Lessons from '../models/lessons.js';
+import User from '../models/users.js';
 
 export const getAllComments = async (req, res) => {
     try {

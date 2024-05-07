@@ -1,5 +1,5 @@
 import Chapters from '../models/chapters.js';
-import Courses from '../models/courses.js';
+import Courses from '../models/courses_teacher.js';
 
 export const getAll = async (req, res) => {
     try {

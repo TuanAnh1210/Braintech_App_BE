@@ -6,30 +6,34 @@ import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 
-import uploadRouter from './routers/upload';
-import coursesRouter from './routers/courses';
-import cateRouter from './routers/categories';
-import chaptersRouter from './routers/chapters';
-import lessonsRouter from './routers/lessons';
-import usersRouter from './routers/users';
-import statusCourseRouter from './routers/statusCourse';
-import notesRouter from './routers/note';
-import quizzsRouter from './routers/quizzs';
-import commentRoute from './routers/comments';
-import finishLessonRoute from './routers/finishLesson';
-import noteRoute from './routers/note';
+import uploadRouter from './routers/upload.js';
+import coursesRouter from './routers/courses.js';
+import coursesTeacherRouter from './routers/courses_teacher.js';
+import cateRouter from './routers/categories.js';
+import chaptersRouter from './routers/chapters.js';
+import chaptersTeacherRouter from './routers/chapterTeacher.js';
+import lessonsRouter from './routers/lessons.js';
+import usersRouter from './routers/users.js';
+import statusCourseRouter from './routers/statusCourse.js';
+import notesRouter from './routers/note.js';
+import quizzsRouter from './routers/quizzs.js';
+import commentRoute from './routers/comments.js';
+import finishLessonRoute from './routers/finishLesson.js';
+import noteRoute from './routers/note.js';
 
 import cookieParser from 'cookie-parser';
+
 
 import paymentRouter from './routers/paymentHistory';
 import paymentDetailRoute from './routers/payment';
 import rateApiRoute from './routers/rate';
 
+
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
 
 const app = express();
-const port = 8080;
+// const port = 8080;
 
 app.use(cookieParser());
 
@@ -42,6 +46,7 @@ app.use(express.static('src/public'));
 
 // Router
 app.use('/api/courses', coursesRouter);
+app.use('/api/courses_teacher', coursesTeacherRouter);
 app.use('/api/paymentDetail', paymentDetailRoute);
 app.use('/api/notes', notesRouter);
 app.use('/api/lessons', lessonsRouter);
@@ -51,6 +56,7 @@ app.use('/api/quizzs', quizzsRouter);
 app.use('/api/categories', cateRouter);
 app.use('/api/comments', commentRoute);
 app.use('/api/chapters', chaptersRouter);
+app.use('/api/chapters/teacher', chaptersTeacherRouter);
 app.use('/upload', uploadRouter);
 app.use('/api/finishLesson', finishLessonRoute);
 app.use('/api/comments', commentRoute);
@@ -72,6 +78,6 @@ app.use((err, req, res, next) => {
 
 mongoose.connect(process.env.DB_URL).then(() => console.log('Connected to DB'));
 
-app.listen(port, () => {
-    console.log('Server is running on ' + port);
+app.listen(process.env.PORT, () => {
+    console.log('Server is running on ' + process.env.PORT);
 });

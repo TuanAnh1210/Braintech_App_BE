@@ -1,10 +1,12 @@
 import cloudinary from '../config/cloudinary.config.js';
-import Courses from '../models/courses.js';
+import Courses from '../models/courses_teacher.js';
 import { _countLessonInChapters } from './finishLesson.js';
 import FinishLesson from '../models/finishLesson.js';
+import statusCourse from '../models/statusCourse.js';
+import courses_teacher from '../models/courses_teacher.js';
 
-export const get = async (req, res) => {
-    const { _page = 1, _limit = 5, _sort = 'createdAt', _order = 'asc' } = req.query;
+export const getCourseByTeacher = async (req, res) => {
+    const { _page = 1, _limit = 5, _sort = 'createdAt', _order = 'asc', teacherId = '' } = req.query;
     const options = {
         page: _page,
         limit: _limit,
@@ -19,20 +21,18 @@ export const get = async (req, res) => {
         ],
     };
     try {
-        const { docs: courses } = await Courses.paginate({}, options);
-
+        const { docs: courses } = await Courses.paginate({ teacherId: teacherId }, options);
         if (courses.length === 0) {
-            res.status(404).json({
+            return res.status(404).json({
                 message: 'Courses does not exist',
             });
         }
-
-        res.send({
+        return res.status(200).json({
             message: 'Get Courses successfully',
             courses,
         });
     } catch (error) {
-        res.status(500).send({
+        res.status(500).json({
             message: error,
         });
     }
@@ -74,8 +74,8 @@ export const getAllClient = async (req, res) => {
         const courses = await Courses.find({ isPublic: true })
             .populate([
                 {
-                    path: 'cate_id',
-                    select: ['name', 'code'],
+                    path: 'cate_id teacherId',
+                    select: ['name', 'code', 'full_name'],
                 },
             ])
             .sort({ _id: -1 });
@@ -109,7 +109,6 @@ export const getCourseById = async (req, res) => {
             course: selectedCourse,
         });
     } catch (error) {
-        console.log(error);
         res.status(500).send({
             message: error,
         });
@@ -160,7 +159,6 @@ export const getCourseLearning = async (req, res) => {
             // currentLessonId: currentLessonId,
         });
     } catch (error) {
-        console.log(error);
         res.status(500).send({
             message: error,
         });
@@ -190,7 +188,6 @@ export const uploadImage = async (req, res) => {
             data: result,
         });
     } catch (error) {
-        console.log(error);
         res.status(500).send({
             message: error,
         });
@@ -225,7 +222,6 @@ export const uploadVideo = async (req, res) => {
             playback_url: result.playback_url,
         });
     } catch (error) {
-        console.log(error);
         res.status(500).send({
             message: error,
         });
@@ -243,7 +239,6 @@ export const createCourse = async (req, res) => {
             data: course,
         });
     } catch (error) {
-        console.log(error);
         res.status(500).send({
             message: error,
         });
@@ -262,7 +257,6 @@ export const updateCourse = async (req, res) => {
             data: body,
         });
     } catch (error) {
-        console.log(error);
         res.status(500).send({
             message: error,
         });
@@ -281,8 +275,67 @@ export const deleteCourse = async (req, res) => {
             message: 'Delete Course Success!',
         });
     } catch (error) {
-        console.log(error);
         res.status(500).send({
+            message: error,
+        });
+    }
+};
+// user
+
+export const getStudentsByTeacher = async (req, res) => {
+    const { _page = 1, _limit = 5, _sort = 'createdAt', _order = 'asc', teacherId = '' } = req.query;
+    const options = {
+        page: _page,
+        limit: _limit,
+        sort: {
+            [_sort]: _order === 'desc' ? -1 : 1,
+        },
+        populate: [
+            {
+                path: 'cate_id',
+                select: ['name'],
+            },
+        ],
+    };
+    try {
+        const { docs: courses } = await Courses.paginate({ teacherId: teacherId }, options);
+        if (courses.length === 0) {
+            return res.status(404).json({
+                message: 'Courses does not exist',
+            });
+        }
+        const courseIds = courses.map((course) => course._id);
+
+        const data = await statusCourse
+            .find({
+                course_id: {
+                    $in: courseIds,
+                },
+            })
+            .populate([
+                {
+                    path: 'user_id',
+                    select: ['name', 'full_name', 'avatar', 'email'],
+                },
+            ]);
+        const newData = await Promise.all(
+            data.map(async (item) => {
+                const { name } = await courses_teacher.findById(item.course_id);
+                return {
+                    _id : item._id,
+                    full_name: item.user_id.full_name,
+                    email: item.user_id.email,
+                    avatar: item.user_id.avatar,
+                    course_id: name,
+                };
+            }),
+        );
+        return res.status(200).json({
+            message: 'Get Courses successfully',
+            newData,
+        });
+    } catch (error) {
+        res.status(500).json({
             message: error,
         });
     }

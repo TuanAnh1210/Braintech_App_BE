@@ -1,6 +1,6 @@
 import { Schema, Types, model } from "mongoose";
 
-import { hashPassword } from "../helper/utils";
+import { hashPassword } from "../helper/utils.js";
 
 const User = new Schema(
   {
@@ -25,8 +25,10 @@ const User = new Schema(
         "https://res.cloudinary.com/dpjieqbsk/image/upload/v1681376184/braintech/n5ktpikmscz1ngfe59go.jpg",
     },
     isAdmin: {
-      type: Boolean,
-      default: false
+      type: Boolean
+    },
+    isTeacher: {
+      type: Boolean
     },
   },
   { timestamps: true, versionKey: false }
