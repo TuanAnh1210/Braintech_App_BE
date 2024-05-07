@@ -1,6 +1,6 @@
 import express from 'express';
 
-import * as controllerQuizzs from '../controllers/quizzs';
+import * as controllerQuizzs from '../controllers/quizzs.js';
 
 const quizzsRouter = express.Router();
 

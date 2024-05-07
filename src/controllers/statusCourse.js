@@ -1,5 +1,6 @@
-import statusCourse from '../models/statusCourse';
-import courses from '../models/courses';
+import statusCourse from '../models/statusCourse.js';
+import courses from '../models/courses.js';
+import finishLesson from '../models/finishLesson.js';
 
 export const getAllOrByTime = async (req, res) => {
     const start = req.query?.fromDate;
@@ -117,9 +118,27 @@ export const updateSttCourse = async (req, res) => {
         const userId = req.userId;
 
         const exist = await statusCourse.findOne({ course_id: course_id, user_id: userId });
-        console.log(exist);
         await statusCourse.findByIdAndUpdate(exist._id, { isFinish: true }, { new: true });
         res.status(200).send({
+            message: 'Khóa học đã được hoàn thành',
+        });
+    } catch (err) {
+        res.status(500).send({
+            message: err.message,
+        });
+    }
+};
+export const deleteSttCourse = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const deleteStatusCourse = await statusCourse.findByIdAndDelete(id);
+        const { course_id, user_id } = deleteStatusCourse
+        const deleteFinishLesson = await finishLesson.deleteMany({
+            user_id : user_id,
+            course_id : course_id
+        })
+        return res.status(200).send({
             message: 'Khóa học đã được hoàn thành',
         });
     } catch (err) {

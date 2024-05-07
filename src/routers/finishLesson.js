@@ -4,8 +4,8 @@ import {
     countLessonFinish,
     getAll,
     getFinishLessonByCourseId,
-} from '../controllers/finishLesson';
-import VerifyToken from '../middlewares/user.middleware';
+} from '../controllers/finishLesson.js';
+import VerifyToken from '../middlewares/user.middleware.js';
 
 const finishLessonRoute = Router();
 

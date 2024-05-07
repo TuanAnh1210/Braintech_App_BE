@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 
-import User from '../models/users';
+import User from '../models/users.js';
 
 const VerifyToken = async (req, res, next) => {
     const JWT_SECRET = process.env.JWT_SECRET;
@@ -20,6 +20,7 @@ const VerifyToken = async (req, res, next) => {
 
             const { _id } = decoded;
             const user = await User.findOne({ _id }).select(['_id']);
+            console.log(user);
 
             if (!user) {
                 return res.status(401).json({

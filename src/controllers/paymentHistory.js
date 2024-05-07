@@ -2,12 +2,12 @@ import moment from 'moment';
 import querystring from 'qs';
 import crypto from 'crypto';
 
-import PaymentHistory from '../models/paymentHistory';
-import Courses from '../models/courses';
+import PaymentHistory from '../models/paymentHistory.js';
+import Courses from '../models/courses.js';
 
 import 'dotenv/config';
-import { nextTimestamp, sortObject } from '../helper/utils';
-import { _countLessonInChapters } from './finishLesson';
+import { nextTimestamp, sortObject } from '../helper/utils.js';
+import { _countLessonInChapters } from './finishLesson.js';
 export const getAllPayment = async (req, res) => {
     const start = req.query?.fromDate;
     const end = req.query?.toDate;
