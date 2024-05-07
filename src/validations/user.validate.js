@@ -7,7 +7,7 @@ export const loginSchema = (data) => {
       is: "email",
       then: Joi.string()
         .email({ tlds: { allow: false } })
-        .regex(/^[a-zA-Z0-9._%+-]+@gmail\.com$/)
+        .regex(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/)
         .required()
         .messages({
           "string.email": "Địa chỉ email không hợp lệ",
@@ -43,7 +43,7 @@ export const registerSchema = (data) => {
       is: "email",
       then: Joi.string()
         .email({ tlds: { allow: false } })
-        .regex(/^[a-zA-Z0-9._%+-]+@gmail\.com$/)
+        .regex(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/)
         .required()
         .messages({
           "string.email": "Địa chỉ email không hợp lệ",
