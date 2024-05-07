@@ -18,7 +18,7 @@ import quizzsRouter from './routers/quizzs';
 import commentRoute from './routers/comments';
 import finishLessonRoute from './routers/finishLesson';
 import noteRoute from './routers/note';
-
+import voucherRoute from './routers/voucher';
 import cookieParser from 'cookie-parser';
 
 import paymentRouter from './routers/paymentHistory';
@@ -55,6 +55,7 @@ app.use('/api/finishLesson', finishLessonRoute);
 app.use('/api/comments', commentRoute);
 app.use('/api/notes', noteRoute);
 app.use('/api/payment', paymentRouter);
+app.use('/api/voucher', voucherRoute);
 
 app.use((req, res, next) => {
     next(createError.NotFound('This route does not exist.'));
