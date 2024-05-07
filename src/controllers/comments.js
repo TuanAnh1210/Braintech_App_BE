@@ -58,7 +58,8 @@ export const getAllCommentsByLesson = async (req, res) => {
             const childComments = [];
             for (const child of children) {
                 const subComments = await getChildrenComments(child);
-                childComments.push({ ...child._doc, comments: subComments });
+                const isMyComment = child.user_id?._id == userId;
+                childComments.push({ ...child._doc, comments: subComments, isMyComment: isMyComment });
             }
             return childComments;
         }
