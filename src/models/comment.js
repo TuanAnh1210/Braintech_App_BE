@@ -15,6 +15,12 @@ const Comment = Schema({
     ref: "lessons",
     require: true,
   },
+  parent_id: {
+    type: Schema.Types.ObjectId,
+    ref: "comments",
+    require: false,
+    default: null
+  }
 });
 
 export default mongoose.model("comments", Comment);
