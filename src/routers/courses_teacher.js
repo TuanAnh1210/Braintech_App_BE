@@ -1,15 +1,16 @@
 import express from 'express';
 
 import { upload, uploadVideo } from '../middlewares/multer.middleware.js';
-import * as controllerCourses from '../controllers/courses.js';
+import * as controllerCourses from '../controllers/courses_teacher.js';
 
 import VerifyToken from '../middlewares/user.middleware.js';
 
 const coursesRouter = express.Router();
 
-coursesRouter.get('/', controllerCourses.get);
-coursesRouter.get('/all', controllerCourses.getAll);
+coursesRouter.get('/all', controllerCourses.getCourseByTeacher);
+// coursesRouter.get('/all', controllerCourses.getAll);
 coursesRouter.get('/all/client', controllerCourses.getAllClient);
+coursesRouter.get('/all/student', controllerCourses.getStudentsByTeacher);
 coursesRouter.get('/:courseId/learning', VerifyToken, controllerCourses.getCourseLearning);
 coursesRouter.get('/:courseId', controllerCourses.getCourseById);
 

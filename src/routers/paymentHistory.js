@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
-import * as controllerPaymentHistory from '../controllers/paymentHistory';
-import VerifyToken from '../middlewares/user.middleware';
+import * as controllerPaymentHistory from '../controllers/paymentHistory.js';
+import VerifyToken from '../middlewares/user.middleware.js';
 
 const paymentRouter = new Router();
 

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import * as controllerLessons from '../controllers/lessons';
+import * as controllerLessons from '../controllers/lessons.js';
 
 const lessonsRouter = new Router();
 

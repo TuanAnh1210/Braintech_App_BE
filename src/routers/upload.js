@@ -2,7 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import path from 'path';
 import sharp from 'sharp';
-import { __dirname } from '../server';
+import { __dirname } from '../server.js';
 
 const router = Router();
 

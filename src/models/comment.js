@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema } from 'mongoose';
 
 const Comment = Schema({
   text: {
@@ -15,6 +15,12 @@ const Comment = Schema({
     ref: "lessons",
     require: true,
   },
+  parent_id: {
+    type: Schema.Types.ObjectId,
+    ref: "comments",
+    require: false,
+    default: null
+  }
 });
 
-export default mongoose.model("comments", Comment);
+export default mongoose.model('comments', Comment);
