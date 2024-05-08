@@ -191,6 +191,23 @@ export const ForgetPassword = async (req, res) => {
         });
     }
 };
+export const UpdateCouresId = async (req, res) => {
+    try {
+        await User.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+        });
+
+        return res.status(200).json({
+            message: 'Đã thay đổi thành công!',
+
+        });
+    } catch (error) {
+        console.log('error: login', error);
+        res.status(500).json({
+            message: error,
+        });
+    }
+};
 
 export const deleteUser = async (req, res) => {
     try {

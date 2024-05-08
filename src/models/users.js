@@ -30,6 +30,13 @@ const User = new Schema(
     isTeacher: {
       type: Boolean
     },
+    course_id: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'coursesteachers',
+        required: true,
+      }
+    ],
   },
   { timestamps: true, versionKey: false }
 );

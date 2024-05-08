@@ -42,11 +42,13 @@ const Courses = new Schema(
             default: false,
             required: true,
         },
-        teacherId : {
-            type: Schema.Types.ObjectId,
-            ref: 'users',
-            required: true,
-        }
+        teacherId: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'users',
+                required: true,
+            }
+        ]
     },
     { timestamps: true, versionKey: false },
 );
