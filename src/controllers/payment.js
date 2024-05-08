@@ -24,7 +24,7 @@ export const getAllByUserId = async (req, res) => {
         const data = await paymentHistory.find({ user_id: userId }).populate([
             {
                 path: 'course_id',
-                select: ['name', 'thumb'],
+                select: ['name', 'thumb', 'description', 'cate_id'],
             },
         ]);
         res.status(200).json({

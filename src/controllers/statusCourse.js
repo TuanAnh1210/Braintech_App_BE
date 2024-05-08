@@ -69,7 +69,7 @@ export const getAllSttCourse = async (req, res) => {
         const data = await statusCourse.find({}).populate([
             {
                 path: 'course_id',
-                select: ['name', 'thumb'],
+                select: ['name', 'thumb', 'description', 'cate_id'],
             },
         ]);
         res.send({
