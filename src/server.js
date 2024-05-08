@@ -6,7 +6,6 @@ import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 
-
 import voucherRoute from './routers/voucher';
 
 import uploadRouter from './routers/upload.js';
@@ -24,14 +23,10 @@ import commentRoute from './routers/comments.js';
 import finishLessonRoute from './routers/finishLesson.js';
 import noteRoute from './routers/note.js';
 
-
 import cookieParser from 'cookie-parser';
-
-
 import paymentRouter from './routers/paymentHistory';
 import paymentDetailRoute from './routers/payment';
 import rateApiRoute from './routers/rate';
-
 
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
@@ -69,8 +64,6 @@ app.use('/api/payment', paymentRouter);
 
 app.use('/api/voucher', voucherRoute);
 app.use('/api/rate', rateApiRoute);
-
-
 app.use((req, res, next) => {
     next(createError.NotFound('This route does not exist.'));
 });

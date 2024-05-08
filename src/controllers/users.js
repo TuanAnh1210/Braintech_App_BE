@@ -21,11 +21,25 @@ export const getAllStudent = async (req, res) => {
 };
 export const getAll = async (req, res) => {
     try {
-        const users = await User.find();
+        const users = await User.find().populate(['vouchers']);
 
         res.json({
             message: 'Get all users successfully',
             data: users,
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: error,
+        });
+    }
+};
+export const getUser = async (req, res) => {
+    try {
+        const user = await User.findOne({ _id: req.params.id });
+
+        res.json({
+            message: 'Get user successfully',
+            data: user,
         });
     } catch (error) {
         res.status(500).json({
@@ -227,6 +241,35 @@ export const updateUser = async (req, res) => {
         const data = req.body;
         if (findUser) {
             const result = await User.findOneAndUpdate({ _id: _id }, data, { new: true });
+            return res.status(200).json({
+                error: 0,
+                result: result,
+                message: 'Sửa thành công',
+            });
+        } else {
+            res.status(404).json({
+                error: 1,
+                message: 'Không tìm thấy người dùng',
+            });
+        }
+    } catch (error) {
+        console.log('Error: update user', error);
+        res.status(500).json({
+            error: 1,
+            message: error,
+        });
+    }
+};
+
+export const updateOtherUser = async (req, res) => {
+    try {
+        const { accessToken } = req.body;
+        if (!accessToken) return res.status(500).json({ message: 'Token not provide!' });
+        const { id } = req.params;
+        const findUser = await User.findById(id);
+        const data = req.body;
+        if (findUser) {
+            const result = await User.updateMany({ _id: id }, data, { new: true });
             return res.status(200).json({
                 error: 0,
                 result: result,
