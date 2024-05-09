@@ -42,6 +42,7 @@ const Courses = new Schema(
             default: false,
             required: true,
         },
+
     },
     { timestamps: true, versionKey: false },
 );

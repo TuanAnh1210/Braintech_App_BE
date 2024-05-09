@@ -156,7 +156,7 @@ export const register = async (req, res) => {
 export const ForgetPassword = async (req, res) => {
     try {
         const error = forgetPasswordSchema(req.body);
-        console.log(error);
+
 
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(req?.body?.password, salt);
@@ -191,6 +191,23 @@ export const ForgetPassword = async (req, res) => {
         });
     }
 };
+export const UpdateCouresId = async (req, res) => {
+    try {
+        await User.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+        });
+
+        return res.status(200).json({
+            message: 'Đã thay đổi thành công!',
+
+        });
+    } catch (error) {
+        console.log('error: login', error);
+        res.status(500).json({
+            message: error,
+        });
+    }
+};
 
 export const deleteUser = async (req, res) => {
     try {
@@ -217,6 +234,25 @@ export const deleteUser = async (req, res) => {
         });
     }
 };
+export const UpdateRole = async (req, res) => {
+
+    try {
+        await User.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+        });
+
+        return res.status(200).json({
+            message: 'Đã thay đổi vai trò thành công!',
+        });
+    } catch (error) {
+        console.log('error: login', error);
+        res.status(500).json({
+            message: error,
+        });
+    }
+};
+
+
 
 export const updateUser = async (req, res) => {
     try {
