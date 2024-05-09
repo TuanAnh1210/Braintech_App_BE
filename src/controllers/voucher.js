@@ -96,3 +96,22 @@ export const deleteVoucher1 = async (req, res) => {
         });
     }
 };
+
+export const updateVoucher = async (req, res) => {
+    try {
+        const voucherId = req.params.id;
+        const payload = req.body;
+
+        const newVoucher = await Vouchers.findByIdAndUpdate(voucherId, payload);
+
+        res.status(200).send({
+            message: 'Update Voucher Success!',
+            data: newVoucher,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            message: error,
+        });
+    }
+};
