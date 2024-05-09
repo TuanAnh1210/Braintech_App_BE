@@ -79,7 +79,6 @@ export const getAllClient = async (req, res) => {
                 },
             ])
             .sort({ _id: -1 });
-
         res.send({
             message: 'Get all courses successfully',
             courses,

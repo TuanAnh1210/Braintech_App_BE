@@ -4,18 +4,34 @@ import User from '../models/users.js';
 
 export const getAllComments = async (req, res) => {
     try {
-        const commentDatas = await Comment.find();
-        let comments = [];
-        for (let item of commentDatas) {
-            const { full_name } = await User.findById(item.user_id);
-            const { name } = await Lessons.findById(item.lesson_id);
-            comments.push({ _id: item._id, text: item._doc.text, user: full_name, lessonName: name });
-        }
+
+        const result = await Comment.aggregate([
+            {
+                $lookup: {
+                    from: 'lessons',
+                    localField: 'lesson_id',
+                    foreignField: '_id',
+                    as: 'lesson'
+                }
+            },
+            {
+                $unwind: '$lesson'
+            },
+            {
+                $group: {
+                    _id: '$lesson_id',
+                    lessonName: { $first: '$lesson.name' },
+                    totalComments: { $sum: 1 }
+                }
+            }
+        ])
+
         res.status(200).send({
             message: 'Lấy thành công toàn bộ bình luận',
-            data: comments,
+            data: result,
         });
     } catch (e) {
+        console.log(e)
         res.status(500).send({
             message: e.message,
         });
@@ -26,26 +42,38 @@ export const getAllCommentsByLesson = async (req, res) => {
     try {
         const userId = req.userId;
         const lesson_id = req.params.id;
-
-        const comments = await Comment.find({ lesson_id: lesson_id }).populate({
+        const commentz = await Comment.find({ lesson_id: lesson_id, parent_id: null }).populate({
             path: 'user_id',
-            select: ['full_name'],
-        });
-
-        // Duyệt qua từng chapter và từng lesson để thêm trạng thái hoàn thành
-        const result = comments.map((cmt) => {
-            const isMyComment = cmt.user_id._id.toString() === userId;
-            return {
-                ...cmt,
-                _doc: { ...cmt._doc, isMyComment: isMyComment },
-            };
-        });
-
+            select: ['full_name', 'avatar'],
+        })
+        const comments = commentz.map(r => r._doc)
+        const getChildrenComments = async (comment) => {
+            const children = await Comment.find({ parent_id: comment._id }).populate({
+                path: 'user_id',
+                select: ['full_name', 'avatar'],
+            })
+            if (children.length === 0) {
+                return [];
+            }
+            const childComments = [];
+            for (const child of children) {
+                const subComments = await getChildrenComments(child);
+                const isMyComment = child.user_id?._id == userId;
+                childComments.push({ ...child._doc, comments: subComments, isMyComment: isMyComment });
+            }
+            return childComments;
+        }
+        const cmtData = await Promise.all(comments.map(async (cmt) => {
+            const isMyComment = cmt.user_id?._id == userId;
+            const subComments = await getChildrenComments(cmt);
+            return { ...cmt, isMyComment: isMyComment, comments: subComments };
+        }));
         res.status(200).send({
             message: 'Lấy thành công toàn bộ bình luận',
-            data: result.map((r) => r._doc),
+            data: cmtData,
         });
     } catch (e) {
+        console.log(e)
         res.status(500).send({
             message: e.message,
         });
@@ -54,15 +82,22 @@ export const getAllCommentsByLesson = async (req, res) => {
 
 export const getCommentById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const comments = await Comment.findById(id);
-        const { phone, full_name } = await User.findById(comments.user_id);
-        const { name } = await Lessons.findById(comments.lesson_id);
+        const userId = req.userId;
+        const lesson_id = req.params.id;
+        const commentz = await Comment.find({ lesson_id: lesson_id }).populate({
+            path: 'user_id',
+            select: ['full_name'],
+        }).populate({
+            path: 'lesson_id',
+            select: ['name']
+        })
+        const comments = commentz.map(r => r._doc)
         res.status(200).send({
-            message: 'Lấy thành công bình luận',
-            data: { text: comments._doc.text, phone: phone, user: full_name, lessonName: name },
+            message: 'Lấy thành công toàn bộ bình luận',
+            data: comments,
         });
     } catch (e) {
+        console.log(e)
         res.status(500).send({
             message: e.message,
         });
@@ -72,12 +107,12 @@ export const getCommentById = async (req, res) => {
 export const postComment = async (req, res) => {
     try {
         const userId = req.userId;
-        const { content, lesson_id } = req.body;
-
+        const { content, lesson_id, parent_id } = req.body;
         const newComment = new Comment({
             lesson_id: lesson_id,
             user_id: userId,
             text: content,
+            parent_id: parent_id
         });
 
         await newComment.save();
