@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { getAllRate, rateCourse } from '../controllers/rate';
-import VerifyToken from '../middlewares/user.middleware';
+import { getAllRate, rateCourse } from '../controllers/rate.js';
+import VerifyToken from '../middlewares/user.middleware.js';
 
 const rateApiRoute = new Router();
 
