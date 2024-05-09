@@ -38,10 +38,11 @@ export const getCourseByTeacher = async (req, res) => {
         });
     }
 };
-export const getCourseByTeacherID = async (req, res) => {
+export const getCourseByTeacherIDs = async (req, res) => {
     const { id } = req.params
     try {
         const { docs: courses } = await Courses.paginate({ teacherId: id });
+        console.log(courses);
 
         if (courses.length === 0) {
             return res.status(404).json({
@@ -68,8 +69,9 @@ export const getAll = async (req, res) => {
                 {
                     path: 'cate_id',
                     select: ['name', 'code'],
-                },
+                }
             ])
+
             .sort({ _id: -1 });
 
         if (courses?.length) {
