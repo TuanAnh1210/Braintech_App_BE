@@ -26,9 +26,11 @@ const User = new Schema(
         },
         isAdmin: {
             type: Boolean,
+            default: false,
         },
         isTeacher: {
             type: Boolean,
+            default: false,
         },
         vouchers: {
             type: [
@@ -37,6 +39,8 @@ const User = new Schema(
                     ref: 'voucher',
                 },
             ],
+            require: true,
+            default: [],
         },
     },
     { timestamps: true, versionKey: false },
