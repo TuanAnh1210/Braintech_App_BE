@@ -9,14 +9,17 @@ import {
     updateUser,
     getTeacher,
     getAllStudent,
-    UpdateRole,
-    UpdateCouresId,
+    updateOtherUser,
+    getUser,
+    getOtherUser,
 } from '../controllers/users.js';
-import { checkAdmin } from '../middlewares/adminMiddleware.js';
+import VerifyToken from '../middlewares/user.middleware.js';
 
 const usersRouter = Router();
 
 usersRouter.get('/', getAll);
+usersRouter.get('/get', VerifyToken, getUser);
+usersRouter.get('/:id', getOtherUser);
 usersRouter.get('/students', getAllStudent);
 usersRouter.get('/teachers', getTeacher);
 
@@ -27,4 +30,6 @@ usersRouter.put('/update/:id', UpdateRole);
 usersRouter.put('/updatecourse/:id', UpdateCouresId);
 usersRouter.delete('/delete/:id', deleteUser);
 usersRouter.patch('/update', updateUser);
+usersRouter.patch('/:id/updateVoucher', updateOtherUser);
+
 export default usersRouter;

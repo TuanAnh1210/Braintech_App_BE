@@ -40,6 +40,26 @@ export const getAll = async (req, res) => {
     }
 };
 
+export const getVouchersByUserId = async (req, res) => {
+    try {
+        const voucherId = req.params.id;
+
+        const voucher = await Vouchers.findById({
+            _id: voucherId,
+        });
+
+        res.status(200).send({
+            message: 'Get Success!',
+            data: voucher,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            message: error,
+        });
+    }
+};
+
 export const getVoucherById = async (req, res) => {
     try {
         const voucherId = req.params.id;
@@ -89,6 +109,25 @@ export const deleteVoucher1 = async (req, res) => {
         } else {
             res.status(400).json({ msg: 'Movie not exists' });
         }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            message: error,
+        });
+    }
+};
+
+export const updateVoucher = async (req, res) => {
+    try {
+        const voucherId = req.params.id;
+        const payload = req.body;
+
+        const newVoucher = await Vouchers.findByIdAndUpdate(voucherId, payload);
+
+        res.status(200).send({
+            message: 'Update Voucher Success!',
+            data: newVoucher,
+        });
     } catch (error) {
         console.log(error);
         res.status(500).send({

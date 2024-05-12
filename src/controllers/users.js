@@ -35,8 +35,23 @@ export const getAll = async (req, res) => {
 };
 export const getUser = async (req, res) => {
     try {
-        const user = await User.findOne({ _id: req.params.id });
+        const userId = req.userId;
+        const user = await User.findOne({ _id: userId }).populate('vouchers');
+        res.json({
+            message: 'Get user successfully',
+            data: user,
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: error,
+        });
+    }
+};
 
+export const getOtherUser = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const user = await User.findOne({ _id: userId }).populate('vouchers');
         res.json({
             message: 'Get user successfully',
             data: user,
@@ -301,11 +316,12 @@ export const updateOtherUser = async (req, res) => {
     try {
         const { accessToken } = req.body;
         if (!accessToken) return res.status(500).json({ message: 'Token not provide!' });
-        const { id } = req.params;
-        const findUser = await User.findById(id);
+        const userId = req.params.id;
+        const findUser = await User.findById({ _id: userId });
+        console.log('Founded user', findUser);
         const data = req.body;
         if (findUser) {
-            const result = await User.updateMany({ _id: id }, data, { new: true });
+            const result = await User.updateMany({ _id: userId }, data, { new: true });
             return res.status(200).json({
                 error: 0,
                 result: result,

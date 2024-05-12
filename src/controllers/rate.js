@@ -17,7 +17,6 @@ export const getAllRate = async (req, res) => {
             message: 'Lấy thành công',
             rates,
         });
-        console.log(rates);
     } catch (err) {
         res.status(500).send({
             message: err.message,
