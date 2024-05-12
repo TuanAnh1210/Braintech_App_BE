@@ -40,6 +40,26 @@ export const getAll = async (req, res) => {
     }
 };
 
+export const getVouchersByUserId = async (req, res) => {
+    try {
+        const voucherId = req.params.id;
+
+        const voucher = await Vouchers.findById({
+            _id: voucherId,
+        });
+
+        res.status(200).send({
+            message: 'Get Success!',
+            data: voucher,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            message: error,
+        });
+    }
+};
+
 export const getVoucherById = async (req, res) => {
     try {
         const voucherId = req.params.id;
