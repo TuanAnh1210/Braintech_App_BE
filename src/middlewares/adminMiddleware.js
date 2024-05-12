@@ -4,6 +4,7 @@ import 'dotenv/config';
 
 export const checkAdmin = async (req, res, next) => {
     const key = process.env.JWT_SECRET;
+
     if (!req.headers?.authorization) {
         res.status(401).send({
             message: 'Token không xác định',
@@ -28,7 +29,9 @@ export const checkAdmin = async (req, res, next) => {
         }
         const _id = decoded.data._id;
         const user = await User.findById(_id);
-        if (!user.isAdmin | !user.isTeacher) {
+
+        console.log(user);
+        if (!user.isAdmin) {
             res.status(401).send({
                 message: 'Không có quyền truy cập tài nguyên',
             });

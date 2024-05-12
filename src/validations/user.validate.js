@@ -22,6 +22,7 @@ export const loginSchema = (data) => {
                     'string.empty': 'Vui lòng nhập số điện thoại hợp lệ',
                     'string.pattern.base': 'Số điện thoại không hợp lệ',
                 }),
+  
         }),
         password: Joi.string().min(6).max(50).required().messages({
             'string.empty': 'Vui lòng nhập mật khẩu',

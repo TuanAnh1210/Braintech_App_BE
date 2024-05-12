@@ -22,10 +22,14 @@ usersRouter.get('/get', VerifyToken, getUser);
 usersRouter.get('/:id', getOtherUser);
 usersRouter.get('/students', getAllStudent);
 usersRouter.get('/teachers', getTeacher);
+
 usersRouter.post('/login', login);
 usersRouter.post('/register', register);
 usersRouter.put('/forgetPassword/:id', ForgetPassword);
+usersRouter.put('/update/:id', UpdateRole);
+usersRouter.put('/updatecourse/:id', UpdateCouresId);
 usersRouter.delete('/delete/:id', deleteUser);
 usersRouter.patch('/update', updateUser);
 usersRouter.patch('/:id/updateVoucher', updateOtherUser);
+
 export default usersRouter;

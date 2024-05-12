@@ -20,6 +20,7 @@ export const getCourseByTeacher = async (req, res) => {
             },
         ],
     };
+
     try {
         const { docs: courses } = await Courses.paginate({ teacherId: teacherId }, options);
         if (courses.length === 0) {
@@ -37,6 +38,28 @@ export const getCourseByTeacher = async (req, res) => {
         });
     }
 };
+export const getCourseByTeacherIDs = async (req, res) => {
+    const { id } = req.params
+    try {
+        const { docs: courses } = await Courses.paginate({ teacherId: id });
+        console.log(courses);
+
+        if (courses.length === 0) {
+            return res.status(404).json({
+                message: 'Courses does not exist',
+            });
+        }
+        return res.status(200).json({
+            message: 'Get Courses successfully',
+            courses,
+        });
+    } catch (error) {
+
+        res.status(500).json({
+            message: error,
+        });
+    }
+};
 
 export const getAll = async (req, res) => {
     try {
@@ -46,8 +69,9 @@ export const getAll = async (req, res) => {
                 {
                     path: 'cate_id',
                     select: ['name', 'code'],
-                },
+                }
             ])
+
             .sort({ _id: -1 });
 
         if (courses?.length) {
@@ -101,7 +125,7 @@ export const getCourseById = async (req, res) => {
             populate: {
                 path: 'lessons',
                 select: ['name', 'url_video', 'isPublic'], // Chọn trường 'title' từ collection Lesson
-            },
+            }
         });
 
         res.send({
@@ -248,9 +272,31 @@ export const createCourse = async (req, res) => {
 export const updateCourse = async (req, res) => {
     try {
         const _id = req.params._id;
+        console.log(_id);
         const body = req.body;
 
-        await Courses.updateOne({ _id: _id }, body);
+        await Courses.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+        });
+
+        res.status(200).send({
+            message: 'Update Course Success!',
+            data: body,
+        });
+    } catch (error) {
+        res.status(500).send({
+            message: error,
+        });
+    }
+};
+export const updateCourseID = async (req, res) => {
+    try {
+        const _id = req.body._id;
+        const body = req.body;
+
+        await Courses.findByIdAndUpdate(_id, req.body, {
+            new: true,
+        });
 
         res.status(200).send({
             message: 'Update Course Success!',
@@ -266,6 +312,25 @@ export const updateCourse = async (req, res) => {
 export const deleteCourse = async (req, res) => {
     try {
         const _id = req.params._id;
+
+        await Courses.deleteOne({
+            _id: _id,
+        });
+
+        res.status(200).send({
+            message: 'Delete Course Success!',
+        });
+    } catch (error) {
+
+        res.status(500).send({
+            message: error,
+        });
+    }
+};
+export const deleteCourseTeacher = async (req, res) => {
+    console.log(req.params.id);
+    try {
+        const _id = req.params.id;
 
         await Courses.deleteOne({
             _id: _id,
@@ -322,7 +387,7 @@ export const getStudentsByTeacher = async (req, res) => {
             data.map(async (item) => {
                 const { name } = await courses_teacher.findById(item.course_id);
                 return {
-                    _id : item._id,
+                    _id: item._id,
                     full_name: item.user_id.full_name,
                     email: item.user_id.email,
                     avatar: item.user_id.avatar,

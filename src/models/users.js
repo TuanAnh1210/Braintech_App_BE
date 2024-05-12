@@ -41,17 +41,17 @@ const User = new Schema(
             ],
             require: true,
             default: [],
-        },
-    },
-    { timestamps: true, versionKey: false },
+        }
+
+  { timestamps: true, versionKey: false },
 );
 
 User.pre('save', async function (next) {
-    const user = this;
-    if (user.isModified('password')) {
-        user.password = await hashPassword(user.password);
-    }
-    next();
+  const user = this;
+  if (user.isModified('password')) {
+    user.password = await hashPassword(user.password);
+  }
+  next();
 });
 
 export default model('users', User);
