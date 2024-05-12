@@ -12,6 +12,8 @@ import {
     updateOtherUser,
     getUser,
     getOtherUser,
+    UpdateRole,
+    UpdateCouresId,
 } from '../controllers/users.js';
 import VerifyToken from '../middlewares/user.middleware.js';
 
