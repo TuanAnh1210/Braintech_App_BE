@@ -25,6 +25,7 @@ export const getAllComments = async (req, res) => {
                 }
             }
         ])
+        console.log(result);
 
         res.status(200).send({
             message: 'Lấy thành công toàn bộ bình luận',

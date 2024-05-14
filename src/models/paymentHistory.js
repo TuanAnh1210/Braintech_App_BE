@@ -17,7 +17,7 @@ const PaymentHistory = Schema(
         },
         course_id: {
             type: Schema.Types.ObjectId,
-            ref: 'courses',
+            ref: 'coursesteachers',
             require: true,
         },
         payment_url: {
