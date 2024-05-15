@@ -5,8 +5,9 @@ import mongoose from 'mongoose';
 import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
+import cookieParser from 'cookie-parser';
 
-import voucherRoute from './routers/voucher';
+import voucherRoute from './routers/voucher.js';
 
 import uploadRouter from './routers/upload.js';
 import coursesRouter from './routers/courses.js';
@@ -23,10 +24,9 @@ import commentRoute from './routers/comments.js';
 import finishLessonRoute from './routers/finishLesson.js';
 import noteRoute from './routers/note.js';
 
-import cookieParser from 'cookie-parser';
-import paymentRouter from './routers/paymentHistory';
-import paymentDetailRoute from './routers/payment';
-import rateApiRoute from './routers/rate';
+import paymentRouter from './routers/paymentHistory.js';
+import paymentDetailRoute from './routers/payment.js';
+import rateApiRoute from './routers/rate.js';
 
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);

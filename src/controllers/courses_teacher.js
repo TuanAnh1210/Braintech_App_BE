@@ -43,7 +43,7 @@ export const getCourseByTeacherIDs = async (req, res) => {
     const { id } = req.params;
     try {
         const { docs: courses } = await Courses.paginate({ teacherId: id });
-        console.log(courses);
+
 
         if (courses.length === 0) {
             return res.status(404).json({
@@ -62,6 +62,7 @@ export const getCourseByTeacherIDs = async (req, res) => {
 };
 
 export const getAll = async (req, res) => {
+
     try {
         let appendData = null;
         const courses = await Courses.find()
@@ -109,6 +110,7 @@ export const getAllClient = async (req, res) => {
             message: 'Get all courses successfully',
             courses,
         });
+        console.log(123, courses);
     } catch (error) {
         res.status(500).send({
             message: error,

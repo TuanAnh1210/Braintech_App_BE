@@ -16,6 +16,10 @@ const Notes = Schema(
             ref: 'lessons',
             require: true,
         },
+        save_at: {
+            type: Number,
+            require: true,
+        },
     },
     { timestamps: true, versionKey: false },
 );

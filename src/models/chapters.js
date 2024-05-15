@@ -7,7 +7,7 @@ const Chapters = new Schema({
     },
     courses_id: {
         type: Schema.Types.ObjectId,
-        ref: 'courses',
+        ref: 'coursesteachers',
         required: true,
     },
     lessons: [
