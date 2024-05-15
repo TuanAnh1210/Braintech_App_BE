@@ -25,10 +25,11 @@ export const getAllBylessonId = async (req, res) => {
 export const createNote = async (req, res) => {
     try {
         const userId = req.userId;
-        const { content, lesson_id } = req.body;
+        const { content, save_at, lesson_id } = req.body;
 
         const newNote = new Notes({
             text: content,
+            save_at: save_at,
             lesson_id: lesson_id,
             user_id: userId,
         });
@@ -43,6 +44,7 @@ export const createNote = async (req, res) => {
         });
     }
 };
+
 export const updateNote = async (req, res) => {
     try {
         const userId = req.userId;
@@ -60,6 +62,7 @@ export const updateNote = async (req, res) => {
         });
     }
 };
+
 export const deleteNote = async (req, res) => {
     try {
         const userId = req.userId;
