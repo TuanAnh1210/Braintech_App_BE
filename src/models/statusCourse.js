@@ -4,7 +4,7 @@ const statusCourse = new Schema(
     {
         course_id: {
             type: Schema.Types.ObjectId,
-            ref: 'courses',
+            ref: 'coursesteachers',
             required: true,
         },
         user_id: {

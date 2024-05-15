@@ -13,7 +13,7 @@ const finishLesson = new Schema({
     },
     course_id: {
         type: Schema.Types.ObjectId,
-        ref: 'courses',
+        ref: 'coursesteachers',
         require: true,
     },
 });
