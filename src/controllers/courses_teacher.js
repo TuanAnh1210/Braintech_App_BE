@@ -38,8 +38,9 @@ export const getCourseByTeacher = async (req, res) => {
         });
     }
 };
+
 export const getCourseByTeacherIDs = async (req, res) => {
-    const { id } = req.params
+    const { id } = req.params;
     try {
         const { docs: courses } = await Courses.paginate({ teacherId: id });
         console.log(courses);
@@ -54,7 +55,6 @@ export const getCourseByTeacherIDs = async (req, res) => {
             courses,
         });
     } catch (error) {
-
         res.status(500).json({
             message: error,
         });
@@ -69,7 +69,7 @@ export const getAll = async (req, res) => {
                 {
                     path: 'cate_id',
                     select: ['name', 'code'],
-                }
+                },
             ])
 
             .sort({ _id: -1 });
@@ -93,6 +93,7 @@ export const getAll = async (req, res) => {
         });
     }
 };
+
 export const getAllClient = async (req, res) => {
     try {
         const courses = await Courses.find({ isPublic: true })
@@ -125,7 +126,7 @@ export const getCourseById = async (req, res) => {
             populate: {
                 path: 'lessons',
                 select: ['name', 'url_video', 'isPublic'], // Chọn trường 'title' từ collection Lesson
-            }
+            },
         });
 
         res.send({
@@ -272,16 +273,16 @@ export const createCourse = async (req, res) => {
 export const updateCourse = async (req, res) => {
     try {
         const _id = req.params._id;
-        console.log(_id);
+
         const body = req.body;
 
-        await Courses.findByIdAndUpdate(req.params.id, req.body, {
+        const course = await Courses.findByIdAndUpdate(_id, body, {
             new: true,
         });
 
         res.status(200).send({
             message: 'Update Course Success!',
-            data: body,
+            data: course,
         });
     } catch (error) {
         res.status(500).send({
@@ -289,20 +290,23 @@ export const updateCourse = async (req, res) => {
         });
     }
 };
+
 export const updateCourseID = async (req, res) => {
     try {
-        const _id = req.body._id;
+        const _id = req.params._id;
+        console.log(_id);
         const body = req.body;
 
-        await Courses.findByIdAndUpdate(_id, req.body, {
+        const course = await Courses.findByIdAndUpdate(_id, body, {
             new: true,
         });
 
         res.status(200).send({
             message: 'Update Course Success!',
-            data: body,
+            data: course,
         });
     } catch (error) {
+        console.log(error);
         res.status(500).send({
             message: error,
         });
@@ -321,12 +325,12 @@ export const deleteCourse = async (req, res) => {
             message: 'Delete Course Success!',
         });
     } catch (error) {
-
         res.status(500).send({
             message: error,
         });
     }
 };
+
 export const deleteCourseTeacher = async (req, res) => {
     console.log(req.params.id);
     try {

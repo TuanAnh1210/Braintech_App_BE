@@ -47,8 +47,8 @@ const Courses = new Schema(
                 type: Schema.Types.ObjectId,
                 ref: 'users',
                 required: true,
-            }
-        ]
+            },
+        ],
     },
     { timestamps: true, versionKey: false },
 );

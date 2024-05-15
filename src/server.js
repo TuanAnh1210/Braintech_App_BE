@@ -44,7 +44,7 @@ app.use(cors());
 app.use(express.static('src/public'));
 
 // Router
-app.use('/api/courses', coursesRouter);
+// app.use('/api/courses', coursesRouter);s
 app.use('/api/courses_teacher', coursesTeacherRouter);
 app.use('/api/paymentDetail', paymentDetailRoute);
 app.use('/api/notes', notesRouter);
