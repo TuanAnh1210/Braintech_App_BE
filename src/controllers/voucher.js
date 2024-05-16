@@ -42,15 +42,15 @@ export const getAll = async (req, res) => {
 
 export const getVouchersByUserId = async (req, res) => {
     try {
-        const voucherId = req.params.id;
+        const userId = req.params.id;
 
-        const voucher = await Vouchers.findById({
-            _id: voucherId,
-        });
+        const vouchers = await User.findById({
+            _id: userId,
+        }).populate('vouchers');
 
         res.status(200).send({
             message: 'Get Success!',
-            data: voucher,
+            data: vouchers,
         });
     } catch (error) {
         console.log(error);
