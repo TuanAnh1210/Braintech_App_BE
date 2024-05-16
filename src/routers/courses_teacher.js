@@ -14,7 +14,7 @@ coursesRouter.get('/all/client', controllerCourses.getAllClient);
 coursesRouter.get('/all/student', controllerCourses.getStudentsByTeacher);
 coursesRouter.get('/:courseId/learning', VerifyToken, controllerCourses.getCourseLearning);
 coursesRouter.get('/:courseId', controllerCourses.getCourseById);
-coursesRouter.get("/teacher/:id", controllerCourses.getCourseByTeacherIDs);
+coursesRouter.get('/teacher/:id', controllerCourses.getCourseByTeacherIDs);
 coursesRouter.post('/create', controllerCourses.createCourse);
 coursesRouter.put('/:_id/update', controllerCourses.updateCourse);
 coursesRouter.put('/update/:id', controllerCourses.updateCourseID);

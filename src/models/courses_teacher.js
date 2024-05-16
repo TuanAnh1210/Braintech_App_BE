@@ -47,12 +47,12 @@ const Courses = new Schema(
                 type: Schema.Types.ObjectId,
                 ref: 'users',
                 required: true,
-            }
-        ]
+            },
+        ],
     },
     { timestamps: true, versionKey: false },
 );
 
 Courses.plugin(mongoosePaginate);
 
-export default mongoose.model('coursesTeacher', Courses);
+export default mongoose.model('coursesteachers', Courses);

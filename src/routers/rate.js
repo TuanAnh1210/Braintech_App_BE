@@ -4,7 +4,7 @@ import VerifyToken from '../middlewares/user.middleware.js';
 
 const rateApiRoute = new Router();
 
-rateApiRoute.get('/getallrate', getAllRate);
+rateApiRoute.get('/getallrate/:id', getAllRate);
 rateApiRoute.post('/ratecourse', VerifyToken, rateCourse);
 
 export default rateApiRoute;
