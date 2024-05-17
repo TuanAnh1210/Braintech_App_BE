@@ -3,7 +3,7 @@ import querystring from 'qs';
 import crypto from 'crypto';
 
 import PaymentHistory from '../models/paymentHistory.js';
-import Courses from '../models/courses.js';
+import Courses from '../models/courses_teacher.js';
 
 import 'dotenv/config';
 import { nextTimestamp, sortObject } from '../helper/utils.js';

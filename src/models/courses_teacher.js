@@ -55,4 +55,4 @@ const Courses = new Schema(
 
 Courses.plugin(mongoosePaginate);
 
-export default mongoose.model('coursesTeacher', Courses);
+export default mongoose.model('coursesteachers', Courses);
