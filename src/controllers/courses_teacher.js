@@ -38,6 +38,7 @@ export const getCourseByTeacher = async (req, res) => {
         });
     }
 };
+
 export const getCourseByTeacherIDs = async (req, res) => {
     const { id } = req.params;
     try {
@@ -93,6 +94,7 @@ export const getAll = async (req, res) => {
         });
     }
 };
+
 export const getAllClient = async (req, res) => {
     try {
         const courses = await Courses.find({ isPublic: true })
@@ -273,15 +275,16 @@ export const createCourse = async (req, res) => {
 export const updateCourse = async (req, res) => {
     try {
         const _id = req.params._id;
+
         const body = req.body;
 
-        await Courses.findByIdAndUpdate(req.params.id, req.body, {
+        const course = await Courses.findByIdAndUpdate(_id, body, {
             new: true,
         });
 
         res.status(200).send({
             message: 'Update Course Success!',
-            data: body,
+            data: course,
         });
     } catch (error) {
         res.status(500).send({
@@ -289,20 +292,23 @@ export const updateCourse = async (req, res) => {
         });
     }
 };
+
 export const updateCourseID = async (req, res) => {
     try {
-        const _id = req.body._id;
+        const _id = req.params._id;
+        console.log(_id);
         const body = req.body;
 
-        await Courses.findByIdAndUpdate(_id, req.body, {
+        const course = await Courses.findByIdAndUpdate(_id, body, {
             new: true,
         });
 
         res.status(200).send({
             message: 'Update Course Success!',
-            data: body,
+            data: course,
         });
     } catch (error) {
+        console.log(error);
         res.status(500).send({
             message: error,
         });
@@ -326,6 +332,7 @@ export const deleteCourse = async (req, res) => {
         });
     }
 };
+
 export const deleteCourseTeacher = async (req, res) => {
     console.log(req.params.id);
     try {
