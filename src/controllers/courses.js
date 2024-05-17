@@ -1,5 +1,5 @@
 import cloudinary from '../config/cloudinary.config.js';
-import Courses from '../models/courses.js';
+import Courses from '../models/courses_teacher.js';
 import { _countLessonInChapters } from './finishLesson.js';
 import FinishLesson from '../models/finishLesson.js';
 

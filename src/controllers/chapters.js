@@ -1,5 +1,5 @@
 import Chapters from '../models/chapters.js';
-import Courses from '../models/courses.js';
+import Courses from '../models/courses_teacher.js';
 
 export const getAll = async (req, res) => {
     try {
@@ -40,12 +40,16 @@ export const createChapter = async (req, res) => {
         const body = req.body;
 
         const chapter = await Chapters.create(body);
-        
-        await Courses.findByIdAndUpdate(body.courses_id, {
-            $addToSet: {
-                chapters: chapter._id,
+
+        await Courses.findByIdAndUpdate(
+            body.courses_id,
+            {
+                $addToSet: {
+                    chapters: chapter._id,
+                },
             },
-        }, { new : true});
+            { new: true },
+        );
 
         res.status(200).send({
             message: 'Create Chapter Success!',

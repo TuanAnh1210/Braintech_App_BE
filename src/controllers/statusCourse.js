@@ -1,5 +1,6 @@
 import statusCourse from '../models/statusCourse.js';
-import courses from '../models/courses.js';
+import Courses from '../models/courses_teacher.js';
+
 import finishLesson from '../models/finishLesson.js';
 
 export const getAllOrByTime = async (req, res) => {
@@ -27,7 +28,7 @@ export const getAllOrByTime = async (req, res) => {
         },
         {
             $lookup: {
-                from: courses.collection.name,
+                from: Courses.collection.name,
                 localField: '_id',
                 foreignField: '_id',
                 as: 'course_info',
@@ -133,11 +134,11 @@ export const deleteSttCourse = async (req, res) => {
         const id = req.params.id;
 
         const deleteStatusCourse = await statusCourse.findByIdAndDelete(id);
-        const { course_id, user_id } = deleteStatusCourse
+        const { course_id, user_id } = deleteStatusCourse;
         const deleteFinishLesson = await finishLesson.deleteMany({
-            user_id : user_id,
-            course_id : course_id
-        })
+            user_id: user_id,
+            course_id: course_id,
+        });
         return res.status(200).send({
             message: 'Khóa học đã được hoàn thành',
         });

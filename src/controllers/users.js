@@ -186,7 +186,6 @@ export const ForgetPassword = async (req, res) => {
     try {
         const error = forgetPasswordSchema(req.body);
 
-
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(req?.body?.password, salt);
 
@@ -228,7 +227,6 @@ export const UpdateCouresId = async (req, res) => {
 
         return res.status(200).json({
             message: 'Đã thay đổi thành công!',
-
         });
     } catch (error) {
         console.log('error: login', error);
@@ -264,7 +262,6 @@ export const deleteUser = async (req, res) => {
     }
 };
 export const UpdateRole = async (req, res) => {
-
     try {
         await User.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
@@ -280,8 +277,6 @@ export const UpdateRole = async (req, res) => {
         });
     }
 };
-
-
 
 export const updateUser = async (req, res) => {
     try {

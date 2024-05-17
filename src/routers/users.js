@@ -22,8 +22,8 @@ const usersRouter = Router();
 usersRouter.get('/', getAll);
 usersRouter.get('/get', VerifyToken, getUser);
 usersRouter.get('/:id', getOtherUser);
-usersRouter.get('/students', getAllStudent);
-usersRouter.get('/teachers', getTeacher);
+usersRouter.get('/all/students', getAllStudent);
+usersRouter.get('/all/teachers', getTeacher);
 
 usersRouter.post('/login', login);
 usersRouter.post('/register', register);

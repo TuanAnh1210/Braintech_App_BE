@@ -42,11 +42,14 @@ export const getAll = async (req, res) => {
 
 export const getVouchersByUserId = async (req, res) => {
     try {
-        const userId = req.params.id;
 
-        const vouchers = await User.findById({
-            _id: userId,
-        }).populate('vouchers');
+        const userId = req.userId;
+        const vouchers = await User.find({ _id: userId }).populate([
+            {
+                path: 'vouchers',
+                select: ['codeName', 'quantity', 'discountAmount', 'maxDiscountAmount'],
+            },
+        ]);
 
         res.status(200).send({
             message: 'Get Success!',
@@ -59,7 +62,6 @@ export const getVouchersByUserId = async (req, res) => {
         });
     }
 };
-
 export const getVoucherById = async (req, res) => {
     try {
         const voucherId = req.params.id;
