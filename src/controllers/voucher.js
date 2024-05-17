@@ -42,6 +42,7 @@ export const getAll = async (req, res) => {
 
 export const getVouchersByUserId = async (req, res) => {
     try {
+
         const userId = req.userId;
         const vouchers = await User.find({ _id: userId }).populate([
             {
@@ -49,7 +50,7 @@ export const getVouchersByUserId = async (req, res) => {
                 select: ['codeName', 'quantity', 'discountAmount', 'maxDiscountAmount'],
             },
         ]);
-        console.log(userId, vouchers);
+
         res.status(200).send({
             message: 'Get Success!',
             data: vouchers,

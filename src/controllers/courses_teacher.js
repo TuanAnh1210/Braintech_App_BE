@@ -39,7 +39,7 @@ export const getCourseByTeacher = async (req, res) => {
     }
 };
 export const getCourseByTeacherIDs = async (req, res) => {
-    const { id } = req.params
+    const { id } = req.params;
     try {
         const { docs: courses } = await Courses.paginate({ teacherId: id });
 
@@ -54,7 +54,6 @@ export const getCourseByTeacherIDs = async (req, res) => {
             courses,
         });
     } catch (error) {
-
         res.status(500).json({
             message: error,
         });
@@ -70,7 +69,7 @@ export const getAll = async (req, res) => {
                 {
                     path: 'cate_id',
                     select: ['name', 'code'],
-                }
+                },
             ])
 
             .sort({ _id: -1 });
@@ -127,7 +126,7 @@ export const getCourseById = async (req, res) => {
             populate: {
                 path: 'lessons',
                 select: ['name', 'url_video', 'isPublic'], // Chọn trường 'title' từ collection Lesson
-            }
+            },
         });
 
         res.send({
@@ -274,7 +273,6 @@ export const createCourse = async (req, res) => {
 export const updateCourse = async (req, res) => {
     try {
         const _id = req.params._id;
-        console.log(_id);
         const body = req.body;
 
         await Courses.findByIdAndUpdate(req.params.id, req.body, {
@@ -323,7 +321,6 @@ export const deleteCourse = async (req, res) => {
             message: 'Delete Course Success!',
         });
     } catch (error) {
-
         res.status(500).send({
             message: error,
         });
