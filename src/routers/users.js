@@ -14,6 +14,7 @@ import {
     getOtherUser,
     UpdateRole,
     UpdateCouresId,
+    removeExpiredVouchers,
 } from '../controllers/users.js';
 import VerifyToken from '../middlewares/user.middleware.js';
 
@@ -33,5 +34,6 @@ usersRouter.put('/updatecourse/:id', UpdateCouresId);
 usersRouter.delete('/delete/:id', deleteUser);
 usersRouter.patch('/update', updateUser);
 usersRouter.patch('/:id/updateVoucher', updateOtherUser);
+usersRouter.patch('/removeExpiredVouchers', removeExpiredVouchers);
 
 export default usersRouter;
