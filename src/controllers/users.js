@@ -313,7 +313,6 @@ export const updateOtherUser = async (req, res) => {
         if (!accessToken) return res.status(500).json({ message: 'Token not provide!' });
         const userId = req.params.id;
         const findUser = await User.findById({ _id: userId });
-        console.log('Founded user', findUser);
         const data = req.body;
         if (findUser) {
             const result = await User.updateMany({ _id: userId }, data, { new: true });
@@ -334,5 +333,28 @@ export const updateOtherUser = async (req, res) => {
             error: 1,
             message: error,
         });
+    }
+};
+
+export const removeExpiredVouchers = async (req, res) => {
+    try {
+        const users = await User.find().populate('vouchers'); // Lấy tất cả người dùng và các voucher của họ
+        const currentDate = new Date();
+
+        for (const user of users) {
+            const validVouchers = user.vouchers.filter((voucher) => {
+                const expiryDate = new Date(voucher.endDate);
+                return expiryDate >= currentDate;
+            });
+
+            if (validVouchers.length !== user.vouchers.length) {
+                user.vouchers = validVouchers;
+                await user.save();
+            }
+        }
+
+        res.status(200).json({ message: 'Voucher hết hạn đã bị xoá' });
+    } catch (error) {
+        res.status(500).json({ message: 'Lỗi khi xóa voucher hết hạn.', error });
     }
 };
