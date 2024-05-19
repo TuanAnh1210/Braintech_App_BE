@@ -8,6 +8,7 @@ import Courses from '../models/courses_teacher.js';
 import 'dotenv/config';
 import { nextTimestamp, sortObject } from '../helper/utils.js';
 import { _countLessonInChapters } from './finishLesson.js';
+
 export const getAllPayment = async (req, res) => {
     const start = req.query?.fromDate;
     const end = req.query?.toDate;
@@ -384,7 +385,7 @@ export const callbackPayment = async (req, res) => {
             },
         );
 
-        res.redirect('http://localhost:3000/detail/' + transaction.course_id);
+        res.redirect(process.env.REDIRECT_URL_VNPAY + transaction.course_id);
     } catch (error) {
         console.log('error: Callback_VNPAY', error);
         res.status(500).json({
