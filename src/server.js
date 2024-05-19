@@ -30,6 +30,7 @@ import paymentRouter from './routers/paymentHistory.js';
 import paymentDetailRoute from './routers/payment.js';
 import rateApiRoute from './routers/rate.js';
 import { Server } from 'socket.io';
+import notiRoute from './routers/noti.js';
 
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
@@ -64,6 +65,7 @@ app.use('/upload', uploadRouter);
 app.use('/api/finishLesson', finishLessonRoute);
 app.use('/api/comments', commentRoute);
 app.use('/api/notes', noteRoute);
+app.use('/api/noti', notiRoute);
 app.use('/api/payment', paymentRouter);
 
 app.use('/api/voucher', voucherRoute);

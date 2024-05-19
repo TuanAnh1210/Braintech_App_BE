@@ -10,7 +10,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:3000',
+        origin: '*',
         methods: ['GET', 'POST'],
     },
 });
@@ -50,6 +50,8 @@ io.on('connection', (socket) => {
 
     // Gửi thông báo tới một học viên cụ thể
     socket.on('sendNotification', ({ userId, message }) => {
+        console.log(userId, 'user ne');
+        console.log(message, 'message ne');
         const socketId = users[userId];
         if (socketId) {
             console.log(userId, 'userId');
