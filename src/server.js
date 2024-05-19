@@ -1,5 +1,7 @@
 import createError from 'http-errors';
 import { fileURLToPath } from 'url';
+import http from 'http';
+
 import { dirname } from 'path';
 import mongoose from 'mongoose';
 import express from 'express';
@@ -27,12 +29,14 @@ import noteRoute from './routers/note.js';
 import paymentRouter from './routers/paymentHistory.js';
 import paymentDetailRoute from './routers/payment.js';
 import rateApiRoute from './routers/rate.js';
+import { Server } from 'socket.io';
 
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
 
 const app = express();
 // const port = 8080;
+const server = http.createServer(app);
 
 app.use(cookieParser());
 
