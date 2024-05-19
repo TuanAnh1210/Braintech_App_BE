@@ -309,14 +309,12 @@ export const updateUser = async (req, res) => {
 
 export const updateOtherUser = async (req, res) => {
     try {
-        const { accessToken } = req.body;
-        if (!accessToken) return res.status(500).json({ message: 'Token not provide!' });
         const userId = req.params.id;
         const findUser = await User.findById({ _id: userId });
-        console.log('Founded user', findUser);
-        const data = req.body;
+        const data = req.body.vouchers;
+        const updateData = { $push: { vouchers: { $each: data } } };
         if (findUser) {
-            const result = await User.updateMany({ _id: userId }, data, { new: true });
+            const result = await User.updateMany({ _id: { $in: userId } }, updateData);
             return res.status(200).json({
                 error: 0,
                 result: result,
