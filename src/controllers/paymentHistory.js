@@ -208,8 +208,8 @@ export const getPaymentByID = async (req, res) => {
 export const createPaymentUrl = async (req, res) => {
     try {
         const userId = req.userId;
-        const { courseId } = req.body;
-
+        const { courseId, voucherPrice } = req.body;
+        console.log('voucherPrice', req.body.voucherPrice);
         if (!courseId) {
             res.status(404).json({
                 message: 'Please provide a valid courseId.',
@@ -218,7 +218,6 @@ export const createPaymentUrl = async (req, res) => {
         }
 
         const course = await Courses.findOne({ _id: courseId }).select(['_id', 'price']);
-
         if (!course) {
             res.status(404).json({
                 message: 'The course does not exist or has been hidden.',
@@ -265,7 +264,7 @@ export const createPaymentUrl = async (req, res) => {
         let vnpUrl = process.env.URL_VNPAY;
         const returnUrl = process.env.RETURN_URL;
         const orderId = moment(date).format('DDHHmmss');
-        const amount = course.price;
+        const amount = voucherPrice > 0 && voucherPrice < course.price ? voucherPrice : course.price;
         const bankCode = 'VNBANK';
 
         const locale = req.body.language || 'vn';
@@ -296,7 +295,7 @@ export const createPaymentUrl = async (req, res) => {
 
         await PaymentHistory.create({
             transaction_id: orderId,
-            amount: amount,
+            amount: voucherPrice,
             user_id: userId,
             course_id: courseId,
             payment_url: vnpUrl,
