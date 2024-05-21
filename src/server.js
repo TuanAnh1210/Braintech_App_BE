@@ -1,5 +1,7 @@
 import createError from 'http-errors';
 import { fileURLToPath } from 'url';
+import http from 'http';
+
 import { dirname } from 'path';
 import mongoose from 'mongoose';
 import express from 'express';
@@ -27,12 +29,15 @@ import noteRoute from './routers/note.js';
 import paymentRouter from './routers/paymentHistory.js';
 import paymentDetailRoute from './routers/payment.js';
 import rateApiRoute from './routers/rate.js';
+import { Server } from 'socket.io';
+import notiRoute from './routers/noti.js';
 
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
 
 const app = express();
 // const port = 8080;
+const server = http.createServer(app);
 
 app.use(cookieParser());
 
@@ -44,7 +49,7 @@ app.use(cors());
 app.use(express.static('src/public'));
 
 // Router
-app.use('/api/courses', coursesRouter);
+// app.use('/api/courses', coursesRouter);s
 app.use('/api/courses_teacher', coursesTeacherRouter);
 app.use('/api/paymentDetail', paymentDetailRoute);
 app.use('/api/notes', notesRouter);
@@ -60,6 +65,7 @@ app.use('/upload', uploadRouter);
 app.use('/api/finishLesson', finishLessonRoute);
 app.use('/api/comments', commentRoute);
 app.use('/api/notes', noteRoute);
+app.use('/api/noti', notiRoute);
 app.use('/api/payment', paymentRouter);
 
 app.use('/api/voucher', voucherRoute);

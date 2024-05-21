@@ -18,6 +18,7 @@ export const getAll = async (req, res) => {
         });
     }
 };
+
 export const getAllByUserId = async (req, res) => {
     try {
         const userId = req.userId;

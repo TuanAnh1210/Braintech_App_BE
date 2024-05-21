@@ -27,6 +27,10 @@ const Vouchers = new Schema(
             type: String,
             required: true,
         },
+        conditionAmount: {
+            type: Number,
+            required: true,
+        },
         status: {
             type: String,
             required: true,
