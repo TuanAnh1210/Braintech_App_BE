@@ -295,9 +295,9 @@ export const updateCourse = async (req, res) => {
 
 export const updateCourseID = async (req, res) => {
     try {
-        const _id = req.params._id;
-        console.log(_id);
+        const _id = req.params.id;
         const body = req.body;
+        console.log(12345, body);
 
         const course = await Courses.findByIdAndUpdate(_id, body, {
             new: true,
@@ -334,7 +334,7 @@ export const deleteCourse = async (req, res) => {
 };
 
 export const deleteCourseTeacher = async (req, res) => {
-    console.log(req.params.id);
+
     try {
         const _id = req.params.id;
 
