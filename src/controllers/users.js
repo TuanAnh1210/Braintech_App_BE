@@ -70,6 +70,7 @@ export const getTeacher = async (req, res) => {
             message: 'Get all teacher successfully',
             data: teachers,
         });
+        console.log(123, teachers);
     } catch (error) {
         res.status(500).json({
             message: error,

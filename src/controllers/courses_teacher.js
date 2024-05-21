@@ -109,7 +109,7 @@ export const getAllClient = async (req, res) => {
             message: 'Get all courses successfully',
             courses,
         });
-        console.log(123, courses);
+
     } catch (error) {
         res.status(500).send({
             message: error,
