@@ -29,7 +29,7 @@ export const getAllPayment = async (req, res) => {
             : []),
         {
             $lookup: {
-                from: 'courses',
+                from: 'coursesteachers',
                 localField: 'course_id',
                 foreignField: '_id',
                 as: 'course_info',
@@ -90,13 +90,14 @@ export const getAllPayment = async (req, res) => {
 
     try {
         const data = await PaymentHistory.aggregate(pipeline).exec();
+
         let appendData = null;
 
         if (data?.length) {
             appendData = await Promise.all(
                 data.map(async (payment) => {
                     if (payment.course_info) {
-                        const totalLessons = await _countLessonInChapters(payment.course_info?.chapters);
+                        const totalLessons = await _countLessonInChapters(payment.course_info.chapters);
 
                         return { ...payment, course_info: { ...payment.course_info, totalLessons } };
                     }
@@ -104,12 +105,9 @@ export const getAllPayment = async (req, res) => {
             );
         }
 
-        const datas = appendData.flat();
-
         res.send({
             message: 'Get payment successfully',
-            // data: appendData || data,
-            data: datas,
+            data: (appendData || data).filter((d) => d),
         });
     } catch (error) {
         res.status(500).send({
@@ -264,7 +262,7 @@ export const createPaymentUrl = async (req, res) => {
         let vnpUrl = process.env.URL_VNPAY;
         const returnUrl = process.env.RETURN_URL;
         const orderId = moment(date).format('DDHHmmss');
-        const amount = voucherPrice > 0 && voucherPrice < course.price ? voucherPrice : course.price;
+        const amount = voucherPrice > 0 && voucherPrice < course.price && voucherPrice ? voucherPrice : course.price;
         const bankCode = 'VNBANK';
 
         const locale = req.body.language || 'vn';
@@ -295,7 +293,7 @@ export const createPaymentUrl = async (req, res) => {
 
         await PaymentHistory.create({
             transaction_id: orderId,
-            amount: voucherPrice,
+            amount: amount,
             user_id: userId,
             course_id: courseId,
             payment_url: vnpUrl,
