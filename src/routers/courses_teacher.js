@@ -16,6 +16,7 @@ coursesRouter.get('/:courseId/learning', VerifyToken, controllerCourses.getCours
 coursesRouter.get('/:courseId', controllerCourses.getCourseById);
 coursesRouter.get('/teacher/:id', controllerCourses.getCourseByTeacherIDs);
 coursesRouter.post('/create', controllerCourses.createCourse);
+coursesRouter.post('/checkPublic', controllerCourses.checkIsPublicCourse);
 coursesRouter.put('/:_id/update', controllerCourses.updateCourse);
 coursesRouter.put('/update/:id', controllerCourses.updateCourseID);
 coursesRouter.delete('/:_id/delete', controllerCourses.deleteCourse);

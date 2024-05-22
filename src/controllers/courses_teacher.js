@@ -5,6 +5,21 @@ import FinishLesson from '../models/finishLesson.js';
 import statusCourse from '../models/statusCourse.js';
 import courses_teacher from '../models/courses_teacher.js';
 
+export const checkIsPublicCourse = async (req, res) => {
+    try {
+        const { courseId } = req.body;
+        const data = await courses_teacher.find({ _id: courseId });
+        return res.status(200).json({
+            message: 'Get Courses successfully',
+            data,
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: error,
+        });
+    }
+};
+
 export const getCourseByTeacher = async (req, res) => {
     const { _page = 1, _limit = 5, _sort = 'createdAt', _order = 'asc', teacherId = '' } = req.query;
     const options = {
@@ -44,7 +59,6 @@ export const getCourseByTeacherIDs = async (req, res) => {
     try {
         const { docs: courses } = await Courses.paginate({ teacherId: id });
 
-
         if (courses.length === 0) {
             return res.status(404).json({
                 message: 'Courses does not exist',
@@ -62,7 +76,6 @@ export const getCourseByTeacherIDs = async (req, res) => {
 };
 
 export const getAll = async (req, res) => {
-
     try {
         let appendData = null;
         const courses = await Courses.find()
@@ -110,7 +123,6 @@ export const getAllClient = async (req, res) => {
             message: 'Get all courses successfully',
             courses,
         });
-
     } catch (error) {
         res.status(500).send({
             message: error,
@@ -334,7 +346,6 @@ export const deleteCourse = async (req, res) => {
 };
 
 export const deleteCourseTeacher = async (req, res) => {
-
     try {
         const _id = req.params.id;
 
