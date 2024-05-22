@@ -390,3 +390,21 @@ export const callbackPayment = async (req, res) => {
         });
     }
 };
+
+export const checkCourseBuy = async (req, res) => {
+    try {
+        const { courseId, userId } = req.body;
+        const data = await PaymentHistory.find({ course_id: courseId, user_id: userId });
+
+        res.send({
+            message: 'Get pay successfully',
+            data,
+            // nextLessonId: nextLessonId,
+            // currentLessonId: currentLessonId,
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: error,
+        });
+    }
+};
