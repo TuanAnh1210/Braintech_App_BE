@@ -8,6 +8,7 @@ import Courses from '../models/courses_teacher.js';
 import 'dotenv/config';
 import { nextTimestamp, sortObject } from '../helper/utils.js';
 import { _countLessonInChapters } from './finishLesson.js';
+import courses_teacher from '../models/courses_teacher.js';
 
 export const getAllPayment = async (req, res) => {
     const start = req.query?.fromDate;
@@ -394,14 +395,25 @@ export const callbackPayment = async (req, res) => {
 export const checkCourseBuy = async (req, res) => {
     try {
         const { courseId, userId } = req.body;
-        const data = await PaymentHistory.find({ course_id: courseId, user_id: userId });
 
-        res.send({
-            message: 'Get pay successfully',
-            data,
-            // nextLessonId: nextLessonId,
-            // currentLessonId: currentLessonId,
-        });
+        const data_v2 = await courses_teacher.find({ _id: courseId });
+        if (data_v2[0].price === 0) {
+            return res.send({
+                message: 'Get pay successfully',
+                data: data_v2,
+                no: true,
+            });
+        } else {
+            const data = await PaymentHistory.find({ course_id: courseId, user_id: userId });
+
+            return res.send({
+                message: 'Get pay successfully',
+                data,
+                // nextLessonId: nextLessonId,
+                // currentLessonId: currentLessonId,
+            });
+        }
+        console.log(data_v2, 'data_2');
     } catch (error) {
         res.status(500).json({
             message: error,
